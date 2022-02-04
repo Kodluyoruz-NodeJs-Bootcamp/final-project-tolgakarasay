@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { User } from './entity/User';
@@ -9,6 +9,10 @@ createConnection()
   .then(async (connection) => {
     // MIDDLEWARES
     app.use(express.static('public'));
+
+    // TEMPLATE ENGINE
+    app.set('views', './src/views');
+    app.set('view engine', 'ejs');
 
     console.log('Inserting a new user into the database...');
     const user = new User();
@@ -23,5 +27,15 @@ createConnection()
     console.log('Loaded users: ', users);
 
     console.log('Here you can setup and run express/koa/any other framework.');
+
+    app.get('/', (req, res) => {
+      res.render('index');
+    });
+
+    // START THE SERVER
+    const port = 3000;
+    app.listen(3000, () => {
+      console.log(`Server started at port ${port}`);
+    });
   })
   .catch((error) => console.log(error));
