@@ -119,6 +119,7 @@ export const makeUserLogout: RequestHandler = (req, res) => {
       console.log(err);
     } else {
       res.clearCookie('access_token');
+      res.clearCookie('connect.sid');
       res.redirect('/login');
     }
   });
