@@ -6,6 +6,16 @@ import pageRoute from './routes/pageRoute';
 
 const app = express();
 
+// ADD GLOBAL VARIABLE
+declare global {
+  namespace NodeJS {
+    interface Global {
+      userIN: any;
+    }
+  }
+}
+global.userIN = null;
+
 createConnection()
   .then(async (connection) => {
     // MIDDLEWARES

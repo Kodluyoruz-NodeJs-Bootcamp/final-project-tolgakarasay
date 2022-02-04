@@ -6,3 +6,15 @@ export const getIndexPage: RequestHandler = (req, res) => {
     page_name: 'index',
   });
 };
+
+export const getLoginPage: RequestHandler = (req, res) => {
+  res.status(200).render('login', {
+    page_name: 'login',
+  });
+};
+
+export const getSignupPage: RequestHandler = (req, res) => {
+  res.status(200).render('signup', {
+    page_name: 'signup',
+  });
+};
