@@ -54,6 +54,10 @@ const app = express();
   app.set('view engine', 'ejs');
 
   // ROUTES
+  app.use('*', (req, res, next) => {
+    global.userIN = req.session.userID;
+    next();
+  });
   app.use('/', pageRoute);
   app.use('/', userRoute);
 
