@@ -20,9 +20,9 @@ const verifyToken: RequestHandler = async (req, res, next) => {
   // check if there is a token in the cookie
   const token = req.cookies.access_token;
   if (!token) {
-    return res
-      .status(403)
-      .render('login', { message: 'Token not found! Login to gain access.' });
+    return res.status(403).render('login', {
+      errorMessage: 'Token not found! Login to gain access.',
+    });
   }
 
   try {
@@ -36,13 +36,13 @@ const verifyToken: RequestHandler = async (req, res, next) => {
     ) {
       return next();
     }
-    return res
-      .status(403)
-      .render('login', { message: 'Access Denied! Login to gain access.' });
+    return res.status(403).render('login', {
+      errorMessage: 'Access Denied! Login to gain access.',
+    });
   } catch (err) {
-    return res
-      .status(401)
-      .render('login', { message: 'Invalid Token! Login to gain access.' });
+    return res.status(401).render('login', {
+      errorMessage: 'Invalid Token! Login to gain access.',
+    });
   }
 };
 
