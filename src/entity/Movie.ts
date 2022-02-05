@@ -8,10 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import MovieReview from './MovieReview';
-// import MovieLike from './MovieLike';
 import User from './User';
 import MovieReview from './MovieReview';
+import MovieLike from './MovieLike';
 
 @Entity()
 export class Movie {
@@ -36,6 +35,9 @@ export class Movie {
 
   @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
   public movie_reviews: MovieReview[];
+
+  @OneToMany(() => MovieLike, (movie_likes) => movie_likes.movie)
+  public movie_likes: MovieLike[];
 
   @Column()
   @CreateDateColumn()
