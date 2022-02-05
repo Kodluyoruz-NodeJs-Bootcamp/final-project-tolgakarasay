@@ -1,6 +1,5 @@
-import { RequestHandler } from 'express';
-import jwtDecode from 'jwt-decode';
-const config = process.env;
+import { json, RequestHandler } from 'express';
+import jwt from 'jsonwebtoken';
 
 // define an interface for decoded token
 interface MyToken {
@@ -17,7 +16,7 @@ declare module 'express-session' {
 }
 
 // this middleware function is invoked to authenticate the user
-const verifyToken: RequestHandler = (req, res, next) => {
+const verifyToken: RequestHandler = async (req, res, next) => {
   // check if there is a token in the cookie
   const token = req.cookies.access_token;
   if (!token) {
@@ -28,7 +27,7 @@ const verifyToken: RequestHandler = (req, res, next) => {
 
   try {
     // Decode the token
-    const decoded = jwtDecode<MyToken>(token);
+    const decoded = await jwt.verify(token, process.env.TOKEN_KEY);
 
     // Check if cookie's id and browser info match with session's.
     if (
