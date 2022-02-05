@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import Movie from './Movie';
+import MovieReview from './MovieReview';
 
 @Entity()
 export class User {
@@ -13,6 +15,12 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Movie, (movie) => movie.user)
+  public movies: Movie[];
+
+  @OneToMany(() => MovieReview, (movie_reviews) => movie_reviews.user)
+  public movie_reviews: MovieReview[];
 }
 
 export default User;
