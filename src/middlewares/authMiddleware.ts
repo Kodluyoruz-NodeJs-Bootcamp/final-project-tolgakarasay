@@ -27,7 +27,7 @@ const verifyToken: RequestHandler = async (req, res, next) => {
 
   try {
     // Decode the token
-    const decoded = await jwt.verify(token, process.env.TOKEN_KEY);
+    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
 
     // Check if cookie's id and browser info match with session's.
     if (
