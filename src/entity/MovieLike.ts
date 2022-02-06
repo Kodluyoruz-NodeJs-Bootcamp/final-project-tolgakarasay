@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -20,12 +21,14 @@ export class MovieLike {
     eager: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   public user: User;
 
   @OneToOne(() => Movie, (movie) => movie.movie_likes, {
     eager: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   public movie: Movie;
 }
 
