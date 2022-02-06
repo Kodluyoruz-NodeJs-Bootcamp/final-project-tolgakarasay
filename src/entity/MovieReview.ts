@@ -25,11 +25,11 @@ export class MovieReview {
   })
   public user: User;
 
-  //   @ManyToOne(() => Movie, (movie) => movie.movie_reviews, {
-  //     eager: true,
-  //     onDelete: 'CASCADE',
-  //   })
-  //   public movie: Movie;
+  @ManyToOne(() => Movie, (movie) => movie.movie_reviews, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  public movie: Movie;
 
   @Column()
   @CreateDateColumn()
