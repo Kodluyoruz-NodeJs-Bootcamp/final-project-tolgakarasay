@@ -24,8 +24,14 @@ export class Movie {
   @IsNotEmpty()
   public title: string;
 
-  @Column()
+  @Column('text')
   public description: string;
+
+  @Column('int', { default: 0 })
+  public likeCount: number;
+
+  @Column('boolean', { default: false })
+  public isShared: boolean = false;
 
   @ManyToOne(() => User, (user) => user.movies, {
     eager: true,
@@ -33,8 +39,8 @@ export class Movie {
   })
   public user: User;
 
-  //   @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
-  //   public movie_reviews: MovieReview[];
+  @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
+  public movie_reviews: MovieReview[];
 
   @OneToMany(() => MovieLike, (movie_likes) => movie_likes.movie)
   public movie_likes: MovieLike[];
