@@ -1,73 +1,73 @@
 <%- include('partials/_header'); %>
 
-	<%- include('partials/_navigation'); %>
+<%- include('partials/_navigation'); %>
 
-		<!-- Home -->
+<!-- Home -->
 
-		<div class="home">
-			<div class="home_background" style="background-image: url(images/index_background.jpg);"></div>
-			<div class="overlay"></div>
-			<div class="home_content">
-				<div class="container">
-					<div class="contact_form_container">
-						<% if(errorMessage){ %>
-							<div class="alert alert-danger">
-								<%= errorMessage %>
-							</div>
-							<% } else if (successMessage){ %>
-								<div class="alert alert-success">
-									<%= successMessage %>
-								</div>
-								<% } %>
-									<div class="form_title">Login</div>
-									<form method="POST" action="/login" id="contact_form" class="contact_form">
-										<div class="row contact_row">
-											<div class="col-lg-12 contact_col">
-												<input type="text" name="username" class="form_input"
-													placeholder="Username" required="required">
-											</div>
-											<div class="col-lg-12 contact_col">
-												<input type="password" name="password" class="form_input"
-													placeholder="Password" required="required">
-											</div>
-											<div class="col-lg-12 contact_col">
-												<button type="submit" class="form_button trans_200">login</button>
-											</div>
-
-											<div class="col-lg-12">
-												<div class="redirect_to_login_or_signup">Don't you have an acoount? <a
-														href="signup">Sign up</a></div>
-											</div>
-
-											<div class="col-lg-12">
-												<div class="or_text">or</div>
-											</div>
-
-											<div class="col-lg-12 ">
-												<a class="btn btn-outline-dark social_button" href="/users/googleauth"
-													role="button" style="text-transform:none">
-													<img width="20px" alt="Google sign-in"
-														src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-													Login with Google
-												</a>
-											</div>
-
-											<div class="col-lg-12 ">
-												<a class="btn btn-outline-dark social_button" href="/users/facebookauth"
-													role="button" style="text-transform:none">
-													<img width="20px" alt="Facebook sign-in"
-														src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" />
-													Login with Facebook
-												</a>
-											</div>
-
-										</div>
-									</form>
-					</div>
+<div class="home">
+	<div class="home_background" style="background-image: url(images/index_background.jpg);"></div>
+	<div class="overlay"></div>
+	<div class="home_content">
+		<div class="container">
+			<div class="contact_form_container">
+				<% if(errorMessage){ %>
+				<div class="alert alert-danger">
+					<%= errorMessage %>
 				</div>
+				<% } else if (successMessage){ %>
+				<div class="alert alert-success">
+					<%= successMessage %>
+				</div>
+				<% } %>
+				<div class="form_title">Login</div>
+				<form method="POST" action="/users/login" id="contact_form" class="contact_form">
+					<div class="row contact_row">
+						<div class="col-lg-12 contact_col">
+							<input type="text" name="username" class="form_input" placeholder="Username"
+								required="required">
+						</div>
+						<div class="col-lg-12 contact_col">
+							<input type="password" name="password" class="form_input" placeholder="Password"
+								required="required">
+						</div>
+						<div class="col-lg-12 contact_col">
+							<button type="submit" class="form_button trans_200">login</button>
+						</div>
+
+						<div class="col-lg-12">
+							<div class="redirect_to_login_or_signup">Don't you have an acoount? <a href="signup">Sign
+									up</a></div>
+						</div>
+
+						<div class="col-lg-12">
+							<div class="or_text">or</div>
+						</div>
+
+						<div class="col-lg-12 ">
+							<a class="btn btn-outline-dark social_button" href="/users/googleauth" role="button"
+								style="text-transform:none">
+								<img width="20px" alt="Google sign-in"
+									src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+								Login with Google
+							</a>
+						</div>
+
+						<div class="col-lg-12 ">
+							<a class="btn btn-outline-dark social_button" href="/users/facebookauth" role="button"
+								style="text-transform:none">
+								<img width="20px" alt="Facebook sign-in"
+									src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" />
+								Login with Facebook
+							</a>
+						</div>
+
+					</div>
+				</form>
 			</div>
 		</div>
-		</div>
+	</div>
+</div>
+</div>
 
 
-		<%- include('partials/_footer'); %>
+<%- include('partials/_footer'); %>

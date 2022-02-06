@@ -4,6 +4,8 @@ import { RequestHandler } from 'express';
 import 'reflect-metadata';
 import { User } from '../entity/User';
 import { getRepository } from 'typeorm';
+import { Movie } from '../entity/Movie';
+import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 
 // Add extra variables to SessionData
 declare module 'express-session' {
@@ -29,10 +31,8 @@ export const registerUser: RequestHandler = async (req, res) => {
     const existingUsername = await getRepository(User).findOne({ username });
 
     if (existingEmail || existingUsername) {
-      return res.status(409).render('signup', {
-        errorMessage: 'User already exists!',
-        page_name: 'signup',
-      });
+      global.errorMessage = 'User already exists!';
+      return res.status(409).redirect('/signup');
     }
 
     // Encrypt user password
@@ -49,11 +49,9 @@ export const registerUser: RequestHandler = async (req, res) => {
     await getRepository(User).save(user);
 
     // Redirect new user to login page
-    return res.status(201).render('login', {
-      errorMessage: null,
-      successMessage: 'You have been succesfully registered. Please login.',
-      page_name: 'login',
-    });
+    global.successMessage =
+      'You have been succesfully registered. Please login.';
+    return res.status(201).redirect('login');
   } catch (err) {
     console.log(err);
   }
@@ -91,15 +89,10 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
       req.session.browser = req.headers['user-agent'];
 
       // Route authenticated user to welcome page
-      return res
-        .status(200)
-        .render('dashboard', { user, token, page_name: 'dashboard' });
+      res.status(200).redirect('dashboard');
     } else {
-      res.status(400).render('login', {
-        page_name: 'login',
-        errorMessage: 'Invalid credentials!',
-        successMessage: null,
-      });
+      global.errorMessage = 'Invalid credentials!';
+      res.status(400).redirect('/login');
     }
   } catch (err) {
     console.log(err);
@@ -123,4 +116,15 @@ export const makeUserLogout: RequestHandler = (req, res) => {
       res.redirect('/login');
     }
   });
+};
+
+export const getDashboardPage: RequestHandler = async (req, res) => {
+  const userMovies = await getRepository(Movie).find(); // BURADAKİ SORGU GÜNCELLENECEKKKKKKKKKKKKKKKKKKKKK
+  res.status(200).render('dashboard', {
+    page_name: 'dashboard',
+    errorMessage: global.errorMessage,
+    succesMessage: global.successMessage,
+    userMovies,
+  });
+  res.on('finish', resetGlobals);
 };

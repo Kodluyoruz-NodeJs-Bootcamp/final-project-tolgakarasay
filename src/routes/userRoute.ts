@@ -7,5 +7,6 @@ router.route('/signup').post(userController.registerUser);
 router.route('/login').post(userController.makeUserLogin);
 //router.route('/list').get(auth, userController.listUsers);
 router.route('/logout').get(userController.makeUserLogout);
+router.route('/dashboard').get(auth, userController.getDashboardPage);
 
 export default router;

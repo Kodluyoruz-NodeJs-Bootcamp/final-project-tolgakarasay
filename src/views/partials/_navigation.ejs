@@ -15,65 +15,60 @@
                         </div>
 
                         <% if(userIN) { %>
-                            <nav class="main_nav_contaner">
-                                <ul class="main_nav">
-                                    <li class="<%= page_name ==='index' && 'active' %>"><a href="/">Home</a></li>
-                                    <li class="<%= page_name ==='x' && 'active' %>"><a href="courses.html">Courses</a>
-                                    </li>
-                                    <li class="<%= page_name ==='y' && 'active' %>"><a
-                                            href="instructors.html">Instructors</a></li>
-                                    <li class="<%= page_name ==='z' && 'active' %>"><a href="#">Events</a></li>
-                                    <li class="<%= page_name ==='t' && 'active' %>"><a href="blog.html">Blog</a></li>
-                                    <li class="<%= page_name ==='k' && 'active' %>"><a href="contact.html">Contact</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <nav class="main_nav_contaner">
+                            <ul class="main_nav">
+                                <li class="<%= page_name ==='index' && 'active' %>"><a href="/">Home</a></li>
+                                <li class="<%= page_name ==='x' && 'active' %>"><a href="courses.html">Courses</a>
+                                </li>
+                                <li class="<%= page_name ==='y' && 'active' %>"><a
+                                        href="instructors.html">Instructors</a></li>
+                                <li class="<%= page_name ==='z' && 'active' %>"><a href="#">Events</a></li>
+                                <li class="<%= page_name ==='t' && 'active' %>"><a href="blog.html">Blog</a></li>
+                                <li class="<%= page_name ==='k' && 'active' %>"><a href="contact.html">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <% } %>
+
+                        <div class="header_content_right ml-auto text-right">
+                            <div class="header_search">
+                                <div class="search_form_container">
+                                    <form action="#" id="search_form" class="search_form trans_400">
+                                        <input type="search" class="header_search_input trans_400"
+                                            placeholder="Type for Search" required="required">
+                                        <div class="search_button">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <% if(!userIN) { %>
+                            <% if(page_name=="index" ) { %>
+                            <div class="user"><a href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                            </div>
+                            <% } else if(page_name=="login" ) { %>
+                            <div class="user"><a href="/signup"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                            </div>
+                            <% } else if(page_name=="signup" ) { %>
+                            <div class="user"><a href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                            </div>
+                            <% } %>
                             <% } %>
 
-                                <div class="header_content_right ml-auto text-right">
-                                    <div class="header_search">
-                                        <div class="search_form_container">
-                                            <form action="#" id="search_form" class="search_form trans_400">
-                                                <input type="search" class="header_search_input trans_400"
-                                                    placeholder="Type for Search" required="required">
-                                                <div class="search_button">
-                                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <% if(!userIN) { %>
-                                        <% if(page_name=="index" ) { %>
-                                            <div class="user"><a href="/login"><i class="fa fa-sign-in"
-                                                        aria-hidden="true"></i></a>
-                                            </div>
-                                            <% } else if(page_name=="login" ) { %>
-                                                <div class="user"><a href="/signup"><i class="fa fa-user-plus"
-                                                            aria-hidden="true"></i></a>
-                                                </div>
-                                                <% } else if(page_name=="signup" ) { %>
-                                                    <div class="user"><a href="/login"><i class="fa fa-sign-in"
-                                                                aria-hidden="true"></i></a>
-                                                    </div>
-                                                    <% } %>
-                                                        <% } %>
-
-                                                            <% if(userIN) { %>
-                                                                <div class="user"><a href="/logout"><i
-                                                                            class="fa fa-sign-out"
-                                                                            aria-hidden="true"></i></a>
-                                                                </div>
-                                                                <% } %>
+                            <% if(userIN) { %>
+                            <div class="user"><a href="/users/logout"><i class="fa fa-sign-out"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                            <% } %>
 
 
-                                                                    <!-- Hamburger -->
+                            <!-- Hamburger -->
 
-                                                                    <div class="hamburger menu_mm">
-                                                                        <i class="fa fa-bars menu_mm"
-                                                                            aria-hidden="true"></i>
-                                                                    </div>
-                                </div>
+                            <div class="hamburger menu_mm">
+                                <i class="fa fa-bars menu_mm" aria-hidden="true"></i>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -103,17 +98,17 @@
     <nav class="menu_nav">
         <ul class="menu_mm">
             <% if(userIN) { %>
-                <li class="menu_mm"><a href="index.html">Home</a></li>
-                <li class="menu_mm"><a href="courses.html">Courses</a></li>
-                <li class="menu_mm"><a href="instructors.html">Instructors</a></li>
-                <li class="menu_mm"><a href="#">Events</a></li>
-                <li class="menu_mm"><a href="blog.html">Blog</a></li>
-                <li class="menu_mm"><a href="contact.html">Contact</a></li>
-                <% } %>
-                    <% if(!userIN) { %>
-                        <li class="menu_mm"><a href="/login">Login</a></li>
-                        <li class="menu_mm"><a href="/signup">Signup</a></li>
-                        <% } %>
+            <li class="menu_mm"><a href="index.html">Home</a></li>
+            <li class="menu_mm"><a href="courses.html">Courses</a></li>
+            <li class="menu_mm"><a href="instructors.html">Instructors</a></li>
+            <li class="menu_mm"><a href="#">Events</a></li>
+            <li class="menu_mm"><a href="blog.html">Blog</a></li>
+            <li class="menu_mm"><a href="contact.html">Contact</a></li>
+            <% } %>
+            <% if(!userIN) { %>
+            <li class="menu_mm"><a href="/login">Login</a></li>
+            <li class="menu_mm"><a href="/signup">Signup</a></li>
+            <% } %>
         </ul>
     </nav>
 </div>

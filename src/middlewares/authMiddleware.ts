@@ -1,5 +1,5 @@
 import { json, RequestHandler } from 'express';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 // define an interface for decoded token
 interface MyToken {
@@ -20,9 +20,8 @@ const verifyToken: RequestHandler = async (req, res, next) => {
   // check if there is a token in the cookie
   const token = req.cookies.access_token;
   if (!token) {
-    return res.status(403).render('login', {
-      errorMessage: 'Token not found! Login to gain access.',
-    });
+    global.errorMessage = 'Token not found! Login to gain access.';
+    return res.status(403).redirect('/login');
   }
 
   try {
@@ -36,13 +35,13 @@ const verifyToken: RequestHandler = async (req, res, next) => {
     ) {
       return next();
     }
-    return res.status(403).render('login', {
-      errorMessage: 'Access Denied! Login to gain access.',
-    });
+
+    global.errorMessage = 'Access Denied! Login to gain access.';
+    return res.status(403).redirect('/login');
   } catch (err) {
-    return res.status(401).render('login', {
-      errorMessage: 'Invalid Token! Login to gain access.',
-    });
+    console.log(err);
+    global.errorMessage = `${err.message}! Login to gain access.`;
+    return res.status(401).redirect('/login');
   }
 };
 

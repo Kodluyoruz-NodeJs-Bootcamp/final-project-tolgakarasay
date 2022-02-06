@@ -12,11 +12,45 @@
     <h1>Welcome to your dashboard</h1>
     <h2>Add a movie</h2>
 
-    <form action="/addMovie" method="POST">
+    <% if(errorMessage){ %>
+    <div class="alert alert-danger">
+        <%= errorMessage %>
+    </div>
+    <% } else if (successMessage){ %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+    <% } %>
+
+    <form action="/movies/addMovie" method="POST">
         <input type="text" name="title" placeholder="title"><br>
         <textarea name="description" rows="4" placeholder="description"></textarea><br>
         <input type="submit" value="Submit">
     </form>
+
+    <h1>Movies you added</h1>
+    <% if(userMovies.length > 0){ %>
+    <% for(let i=0; i<userMovies.length; i++){ %>
+
+    <div>
+        <h2><%= userMovies[i].title %></h2>
+
+        <form method="POST" action="/movies/like">
+            <input type="hidden" name="course_id" value="<%= userMovies[i].id %>">
+            <button class="btn btn-lg btn-warning text-white"><span>LIKE</span></button>
+        </form>
+
+        <p><%= userMovies[i].likeCount %> likes</p>
+        <p><%= userMovies[i].description %></p>
+    </div>
+
+    <% } %>
+    <% } else { %>
+
+    <div>
+        There is no movie in the database yet
+    </div>
+    <% } %>
 </body>
 
 </html>

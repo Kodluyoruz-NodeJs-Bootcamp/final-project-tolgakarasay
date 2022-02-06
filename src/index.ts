@@ -16,10 +16,14 @@ declare global {
   namespace NodeJS {
     interface Global {
       userIN: any;
+      errorMessage: string;
+      successMessage: string;
     }
   }
 }
 global.userIN = null;
+global.errorMessage = null;
+global.successMessage = null;
 
 const app = express();
 
@@ -55,13 +59,14 @@ const app = express();
   app.set('view engine', 'ejs');
 
   // ROUTES
+
   app.use('*', (req, res, next) => {
     global.userIN = req.session.userID;
     next();
   });
   app.use('/', pageRoute);
-  app.use('/', userRoute);
-  app.use('/', movieRoute);
+  app.use('/users', userRoute);
+  app.use('/movies', movieRoute);
 
   // START THE SERVER
   const { API_PORT } = process.env;
