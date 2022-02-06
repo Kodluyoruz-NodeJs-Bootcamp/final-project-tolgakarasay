@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import Post from './Movie';
+import Movie from './Movie';
 import User from './User';
 
 @Entity()
@@ -25,11 +25,11 @@ export class MovieReview {
   })
   public user: User;
 
-  @ManyToOne(() => Post, (post) => post.movie_reviews, {
-    eager: true,
-    onDelete: 'CASCADE',
-  })
-  public post: Post;
+  //   @ManyToOne(() => Movie, (movie) => movie.movie_reviews, {
+  //     eager: true,
+  //     onDelete: 'CASCADE',
+  //   })
+  //   public movie: Movie;
 
   @Column()
   @CreateDateColumn()

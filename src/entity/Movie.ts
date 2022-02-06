@@ -33,8 +33,8 @@ export class Movie {
   })
   public user: User;
 
-  @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
-  public movie_reviews: MovieReview[];
+  //   @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
+  //   public movie_reviews: MovieReview[];
 
   @OneToMany(() => MovieLike, (movie_likes) => movie_likes.movie)
   public movie_likes: MovieLike[];

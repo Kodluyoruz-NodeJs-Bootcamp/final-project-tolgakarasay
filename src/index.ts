@@ -9,6 +9,7 @@ require('dotenv').config();
 import { Session } from './entity/Session';
 import userRoute from './routes/userRoute';
 import pageRoute from './routes/pageRoute';
+import movieRoute from './routes/movieRoute';
 
 // ADD GLOBAL VARIABLES
 declare global {
@@ -60,6 +61,7 @@ const app = express();
   });
   app.use('/', pageRoute);
   app.use('/', userRoute);
+  app.use('/', movieRoute);
 
   // START THE SERVER
   const { API_PORT } = process.env;

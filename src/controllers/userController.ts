@@ -9,7 +9,7 @@ import { getRepository } from 'typeorm';
 declare module 'express-session' {
   interface SessionData {
     browser: String;
-    userID: String;
+    userID: number;
   }
 }
 
@@ -87,13 +87,13 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
       });
 
       // keep user's id and browser info in session
-      req.session.userID = user.id.toString();
+      req.session.userID = user.id;
       req.session.browser = req.headers['user-agent'];
 
       // Route authenticated user to welcome page
       return res
         .status(200)
-        .render('index', { user, token, page_name: 'index' });
+        .render('dashboard', { user, token, page_name: 'dashboard' });
     } else {
       res.status(400).render('login', {
         page_name: 'login',

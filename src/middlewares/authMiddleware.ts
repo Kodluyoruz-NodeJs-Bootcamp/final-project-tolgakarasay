@@ -11,7 +11,7 @@ interface MyToken {
 declare module 'express-session' {
   interface SessionData {
     browser: String;
-    userID: String;
+    userID: number;
   }
 }
 
