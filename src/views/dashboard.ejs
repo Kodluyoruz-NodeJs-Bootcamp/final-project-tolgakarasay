@@ -25,7 +25,13 @@
     <form action="/movies/addMovie" method="POST">
         <input type="text" name="title" placeholder="title"><br>
         <textarea name="description" rows="4" placeholder="description"></textarea><br>
+
+        <input type="radio" id="share" name="isShared" value=1>
+        <label for="share">Share</label><br>
+        <input type="radio" id="hide" name="isShared" value=0>
+        <label for="hide">Don't share.</label><br>
         <input type="submit" value="Submit">
+
     </form>
 
     <h1>Movies you added</h1>
@@ -39,16 +45,20 @@
             <input type="hidden" name="course_id" value="<%= userMovies[i].id %>">
             <button class="btn btn-lg btn-warning text-white"><span>LIKE</span></button>
         </form>
+        <div>
+            <a href="/movies/<%= userMovies[i].id %>?_method=DELETE" onclick="return confirm('ARE YOU SURE')"
+                class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a>
 
-        <p><%= userMovies[i].likeCount %> likes</p>
-        <p><%= userMovies[i].description %></p>
+            <p><%= userMovies[i].likeCount %> likes</p>
+            <p><%= userMovies[i].description %></p>
+        </div>
     </div>
 
     <% } %>
     <% } else { %>
 
     <div>
-        There is no movie in the database yet
+        You haven't added any movie yet.
     </div>
     <% } %>
 </body>

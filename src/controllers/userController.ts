@@ -51,7 +51,7 @@ export const registerUser: RequestHandler = async (req, res) => {
     // Redirect new user to login page
     global.successMessage =
       'You have been succesfully registered. Please login.';
-    return res.status(201).redirect('login');
+    return res.status(201).redirect('/login');
   } catch (err) {
     console.log(err);
   }
@@ -112,7 +112,7 @@ export const makeUserLogout: RequestHandler = (req, res) => {
       console.log(err);
     } else {
       res.clearCookie('access_token');
-      res.clearCookie('connect.sid');
+      //res.clearCookie('connect.sid');
       res.redirect('/login');
     }
   });

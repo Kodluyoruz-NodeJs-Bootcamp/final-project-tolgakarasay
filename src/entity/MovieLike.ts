@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,14 +18,14 @@ export class MovieLike {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @OneToOne(() => User, (user) => user.movie_likes, {
+  @ManyToOne(() => User, {
     eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   public user: User;
 
-  @OneToOne(() => Movie, (movie) => movie.movie_likes, {
+  @ManyToOne(() => Movie, {
     eager: true,
     onDelete: 'CASCADE',
   })

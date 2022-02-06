@@ -20,6 +20,7 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "method-override": "^3.0.0",
     "mysql": "^2.14.1",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.41",

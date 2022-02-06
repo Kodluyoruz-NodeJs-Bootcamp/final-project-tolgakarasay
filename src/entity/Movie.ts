@@ -35,15 +35,13 @@ export class Movie {
 
   @ManyToOne(() => User, (user) => user.movies, {
     eager: true,
+    cascade: true,
     onDelete: 'CASCADE',
   })
   public user: User;
 
   @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
   public movie_reviews: MovieReview[];
-
-  @OneToMany(() => MovieLike, (movie_likes) => movie_likes.movie)
-  public movie_likes: MovieLike[];
 
   @Column()
   @CreateDateColumn()

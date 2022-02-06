@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as ejs from 'ejs';
+import * as methodOverride from 'method-override';
 import { createConnection, getConnection } from 'typeorm';
 import { TypeormStore } from 'typeorm-store';
 require('dotenv').config();
@@ -36,6 +37,11 @@ const app = express();
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+  app.use(
+    methodOverride('_method', {
+      methods: ['POST', 'GET'],
+    })
+  );
 
   // SESSION
   app.use(

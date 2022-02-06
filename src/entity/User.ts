@@ -28,9 +28,6 @@ export class User {
 
   @OneToMany(() => MovieReview, (movie_reviews) => movie_reviews.user)
   public movie_reviews: MovieReview[];
-
-  @OneToMany(() => MovieLike, (movie_likes) => movie_likes.user)
-  public movie_likes: MovieLike[];
 }
 
 export default User;
