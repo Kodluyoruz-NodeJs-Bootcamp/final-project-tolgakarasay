@@ -84,10 +84,6 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
         httpOnly: true,
       });
 
-      // keep user's id and browser info in session
-      req.session.userID = user.id;
-      req.session.browser = req.headers['user-agent'];
-
       // Route authenticated user to welcome page
       res.status(200).redirect('dashboard');
     } else {
@@ -119,7 +115,12 @@ export const makeUserLogout: RequestHandler = (req, res) => {
 };
 
 export const getDashboardPage: RequestHandler = async (req, res) => {
-  const userMovies = await getRepository(Movie).find(); // BURADAKİ SORGU GÜNCELLENECEKKKKKKKKKKKKKKKKKKKKK
+  const user = await getRepository(User).findOne(res.locals.id);
+
+  const userMovies = await getRepository(Movie).find({
+    where: { user },
+    order: { createdAt: 'DESC' },
+  });
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     errorMessage: global.errorMessage,
