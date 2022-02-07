@@ -16,7 +16,7 @@ import movieRoute from './routes/movieRoute';
 declare global {
   namespace NodeJS {
     interface Global {
-      userIN: any;
+      userIN: number;
       errorMessage: string;
       successMessage: string;
     }
@@ -66,10 +66,10 @@ const app = express();
 
   // ROUTES
 
-  app.use('*', (req, res, next) => {
-    global.userIN = req.session.userID;
-    next();
-  });
+  // app.use('*', (req, res, next) => {
+  //   global.userIN = req.session.userID;
+  //   next();
+  // });
   app.use('/', pageRoute);
   app.use('/users', userRoute);
   app.use('/movies', movieRoute);

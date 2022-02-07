@@ -18,8 +18,8 @@ export const addMovie: RequestHandler = async (req, res) => {
       return res.status(400).redirect('/users/dashboard');
     }
 
-    console.log(res.locals.id);
-    const user = await getRepository(User).findOne({ id: res.locals.id });
+    console.log(global.userIN);
+    const user = await getRepository(User).findOne({ id: global.userIN });
 
     // Create new movie
     const movie = getRepository(Movie).create({
@@ -45,7 +45,7 @@ export const addMovie: RequestHandler = async (req, res) => {
 // LIST ALL SHARED MOVIES
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
   const user = await getRepository(User).findOne({
-    id: res.locals.id,
+    id: global.userIN,
   });
 
   const likesByUser = await getRepository(MovieLike).find({ user: user });
@@ -84,14 +84,14 @@ export const deleteMovie: RequestHandler = async (req, res) => {
 export const likeMovie: RequestHandler = async (req, res) => {
   try {
     const user = await getRepository(User).findOne({
-      id: res.locals.id,
+      id: global.userIN,
     });
 
     const movie = await getRepository(Movie).findOne({
       id: req.body.id,
     });
 
-    if (movie.isShared) {
+    if (movie.isShared || movie.user.id == global.userIN) {
       const like = getRepository(MovieLike).create({
         user,
         movie,
@@ -102,9 +102,11 @@ export const likeMovie: RequestHandler = async (req, res) => {
       await getRepository(Movie).save(movie);
 
       console.log('you liked this movie');
-      return res.status(200).redirect('/movies');
+      return res.status(200).redirect(req.body.requestAddress);
     } else {
-      return res.status(400).send('You cannot like a private movie.');
+      return res
+        .status(400)
+        .send('Only the movie owner can like a private movie.');
     }
   } catch (error) {
     return res.status(400).json({
@@ -118,7 +120,7 @@ export const likeMovie: RequestHandler = async (req, res) => {
 export const unlikeMovie: RequestHandler = async (req, res) => {
   try {
     const user = await getRepository(User).findOne({
-      id: res.locals.id,
+      id: global.userIN,
     });
 
     const movie = await getRepository(Movie).findOne({
@@ -136,7 +138,8 @@ export const unlikeMovie: RequestHandler = async (req, res) => {
     await getRepository(Movie).save(movie);
 
     console.log('you unliked this movie');
-    return res.status(200).redirect('/movies');
+    console.log(req.body.requestAddress);
+    return res.status(200).redirect(req.body.requestAddress);
   } catch (error) {
     return res.status(400).json({
       status: 'fail',
@@ -165,4 +168,43 @@ export const toggleMovieVisibility: RequestHandler = async (req, res) => {
     global.errorMessage = error;
     return res.status(400).redirect('/users/dashboard');
   }
+};
+
+// GET SINGLE MOVIE PAGE
+export const getMovie: RequestHandler = async (req, res) => {
+  try {
+    const movie = await getRepository(Movie).findOne(req.params.id);
+
+    const user = await getRepository(User).findOne({
+      id: global.userIN,
+    });
+
+    const likesByUser = await getRepository(MovieLike).find({ user: user });
+    const moviesLikedByUser = [];
+
+    if (likesByUser[0]) {
+      likesByUser.map((item) => {
+        moviesLikedByUser.push(item.movie.id);
+      });
+    }
+
+    console.log(global.userIN);
+    console.log(movie.user.id);
+    if (movie.isShared == false && movie.user.id != global.userIN) {
+      return res
+        .status(403)
+        .send(
+          "Access Denied. A private movie's page can only be seen by its creator."
+        );
+    }
+    res.status(200).render('movie', {
+      page_name: 'movie',
+      movie,
+      moviesLikedByUser,
+    });
+  } catch (error) {
+    global.errorMessage = error;
+    res.status(400).redirect('/movies');
+  }
+  res.on('finish', resetGlobals);
 };

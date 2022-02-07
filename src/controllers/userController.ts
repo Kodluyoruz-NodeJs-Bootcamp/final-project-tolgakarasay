@@ -104,13 +104,14 @@ export const makeUserLogout: RequestHandler = (req, res) => {
     } else {
       res.clearCookie('access_token');
       res.clearCookie('connect.sid');
+      global.userIN = null;
       return res.redirect('/login');
     }
   });
 };
 
 export const getDashboardPage: RequestHandler = async (req, res) => {
-  const user = await getRepository(User).findOne(res.locals.id);
+  const user = await getRepository(User).findOne(global.userIN);
 
   const userMovies = await getRepository(Movie).find({
     where: { user },

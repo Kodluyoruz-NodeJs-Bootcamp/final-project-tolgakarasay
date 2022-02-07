@@ -39,7 +39,7 @@
     <% for(let i=0; i<userMovies.length; i++){ %>
 
     <div>
-        <h2><%= userMovies[i].title %></h2>
+        <h2><a href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title %></a></h2>
         <div>
             <a href="/movies/<%= userMovies[i].id %>?_method=DELETE"
                 onclick="return confirm('Are you sure you want to delete this item?')"
