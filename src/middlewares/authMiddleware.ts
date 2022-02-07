@@ -13,6 +13,7 @@ const verifyToken: RequestHandler = async (req, res, next) => {
   try {
     // Decode the token
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    res.locals.id = decoded.id;
   } catch (err) {
     global.errorMessage = `${err.message}! Login to gain access.`;
     return res.status(401).redirect('/login');
