@@ -6,7 +6,7 @@ import Movie from '../entity/Movie';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import MovieLike from '../entity/MovieLike';
 
-// This function is invoked to add a new movie
+// ADD A MOVIE
 export const addMovie: RequestHandler = async (req, res) => {
   try {
     // Get movie info
@@ -17,9 +17,8 @@ export const addMovie: RequestHandler = async (req, res) => {
       res.status(400).send('All input is required');
     }
 
-    const currentUserId = req.session.userID;
-
-    const user = await getRepository(User).findOne(currentUserId);
+    console.log(res.locals.id);
+    const user = await getRepository(User).findOne({ id: res.locals.id });
 
     // Create new movie
     const movie = getRepository(Movie).create({
@@ -45,18 +44,25 @@ export const addMovie: RequestHandler = async (req, res) => {
 // LIST ALL SHARED MOVIES
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
   const user = await getRepository(User).findOne({
-    id: req.session.userID,
-  });
-  const likesByUser = await getRepository(MovieLike).find({ user: user });
-  const moviesLikedByUser = [];
-  likesByUser.map((item) => {
-    moviesLikedByUser.push(item.movie.id);
+    id: res.locals.id,
   });
 
+  const likesByUser = await getRepository(MovieLike).find({ user: user });
+  const moviesLikedByUser = [];
+
+  if (likesByUser[0]) {
+    likesByUser.map((item) => {
+      moviesLikedByUser.push(item.movie.id);
+    });
+  }
+
   console.log(moviesLikedByUser);
+
   const allSharedMovies = await getRepository(Movie).find({
-    isShared: true,
+    where: { isShared: true },
+    order: { createdAt: 'DESC' },
   });
+
   res.render('movies', { allSharedMovies, moviesLikedByUser });
 };
 
@@ -77,24 +83,28 @@ export const deleteMovie: RequestHandler = async (req, res) => {
 export const likeMovie: RequestHandler = async (req, res) => {
   try {
     const user = await getRepository(User).findOne({
-      id: req.session.userID,
+      id: res.locals.id,
     });
 
     const movie = await getRepository(Movie).findOne({
       id: req.body.id,
     });
 
-    const like = getRepository(MovieLike).create({
-      user,
-      movie,
-    });
-    await getRepository(MovieLike).save(like);
+    if (movie.isShared) {
+      const like = getRepository(MovieLike).create({
+        user,
+        movie,
+      });
+      await getRepository(MovieLike).save(like);
 
-    movie.likeCount++;
-    await getRepository(Movie).save(movie);
+      movie.likeCount++;
+      await getRepository(Movie).save(movie);
 
-    console.log('you liked this movie');
-    res.status(200).redirect('/movies');
+      console.log('you liked this movie');
+      res.status(200).redirect('/movies');
+    } else {
+      res.status(400).send('You cannot like a private movie.');
+    }
   } catch (error) {
     res.status(400).json({
       status: 'fail',
@@ -107,7 +117,7 @@ export const likeMovie: RequestHandler = async (req, res) => {
 export const unlikeMovie: RequestHandler = async (req, res) => {
   try {
     const user = await getRepository(User).findOne({
-      id: req.session.userID,
+      id: res.locals.id,
     });
 
     const movie = await getRepository(Movie).findOne({
@@ -131,5 +141,27 @@ export const unlikeMovie: RequestHandler = async (req, res) => {
       status: 'fail',
       error,
     });
+  }
+};
+
+// TOGGLE MOVIE VISIBILITY
+export const toggleMovieVisibility: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const movie = await getRepository(Movie).findOne(id);
+
+    if (movie.isShared) {
+      movie.isShared = false;
+    } else {
+      movie.isShared = true;
+    }
+
+    await getRepository(Movie).save(movie);
+
+    global.successMessage = 'Movie visibility been updated successfully';
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    global.errorMessage = error;
+    res.status(400).redirect('/users/dashboard');
   }
 };
