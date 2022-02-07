@@ -5,7 +5,8 @@ const auth = require('../middlewares/authMiddleware').default;
 // movie routes
 router.route('/addMovie').post(auth, movieController.addMovie);
 router.route('/').get(auth, movieController.listAllSharedMovies);
-router.route('/:id').delete(movieController.deleteMovie);
-router.route('/like').post(movieController.likeMovie);
-router.route('/unlike').post(movieController.unlikeMovie);
+router.route('/:id').delete(auth, movieController.deleteMovie);
+router.route('/like').post(auth, movieController.likeMovie);
+router.route('/unlike').post(auth, movieController.unlikeMovie);
+router.route('/:id').put(movieController.toggleMovieVisibility);
 export default router;
