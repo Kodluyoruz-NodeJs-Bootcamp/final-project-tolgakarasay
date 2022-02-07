@@ -23,7 +23,8 @@ export const registerUser: RequestHandler = async (req, res) => {
 
     // Validate user credentials
     if (!(email && username && password)) {
-      res.status(400).send('All input is required');
+      global.errorMessage = 'All input is required';
+      return res.status(400).redirect('/signup');
     }
 
     // Check if user already exists in the database
@@ -53,7 +54,8 @@ export const registerUser: RequestHandler = async (req, res) => {
       'You have been succesfully registered. Please login.';
     return res.status(201).redirect('/login');
   } catch (err) {
-    console.log(err);
+    global.errorMessage = err;
+    return res.status(201).redirect('/signup');
   }
 };
 
@@ -65,7 +67,7 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
 
     // Validate user input
     if (!(username && password)) {
-      res.status(400).send('All input is required');
+      return res.status(400).send('All input is required');
     }
 
     // If user exists and password matches, create token
@@ -85,31 +87,24 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
       });
 
       // Route authenticated user to welcome page
-      res.status(200).redirect('dashboard');
-    } else {
-      global.errorMessage = 'Invalid credentials!';
-      res.status(400).redirect('/login');
+      return res.status(200).redirect('dashboard');
     }
+    global.errorMessage = 'Invalid credentials!';
   } catch (err) {
-    console.log(err);
+    global.errorMessage = err;
   }
-};
-
-// this function is invoked to list all users in the database
-export const listUsers: RequestHandler = async (req, res) => {
-  const allUsers = await getRepository(User).find();
-  res.render('userlist', { allUsers });
+  return res.status(400).redirect('/login');
 };
 
 // this function is invoked when user clicks on logout button.
 export const makeUserLogout: RequestHandler = (req, res) => {
   req.session.destroy(function (err) {
     if (err) {
-      console.log(err);
+      return res.status(400).send(err);
     } else {
       res.clearCookie('access_token');
-      //res.clearCookie('connect.sid');
-      res.redirect('/login');
+      res.clearCookie('connect.sid');
+      return res.redirect('/login');
     }
   });
 };

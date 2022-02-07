@@ -14,7 +14,8 @@ export const addMovie: RequestHandler = async (req, res) => {
 
     // Validate user info
     if (!(title && description)) {
-      res.status(400).send('All input is required');
+      global.errorMessage = 'All input is required';
+      return res.status(400).redirect('/users/dashboard');
     }
 
     console.log(res.locals.id);
@@ -33,11 +34,11 @@ export const addMovie: RequestHandler = async (req, res) => {
 
     // Redirect user to dashboard page
     global.successMessage = 'Movie has been added successfully';
-    res.status(201).redirect('/users/dashboard');
+    return res.status(201).redirect('/users/dashboard');
   } catch (err) {
     console.log(err);
     global.errorMessage = err.sqlMessage;
-    res.status(400).redirect('/users/dashboard');
+    return res.status(400).redirect('/users/dashboard');
   }
 };
 
@@ -63,7 +64,7 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
     order: { createdAt: 'DESC' },
   });
 
-  res.render('movies', { allSharedMovies, moviesLikedByUser });
+  return res.render('movies', { allSharedMovies, moviesLikedByUser });
 };
 
 // DELETE A MOVIE
@@ -72,10 +73,10 @@ export const deleteMovie: RequestHandler = async (req, res) => {
   try {
     await getRepository(Movie).delete(id);
     global.successMessage = 'Movie has been deleted successfully';
-    res.status(200).redirect('/users/dashboard');
+    return res.status(200).redirect('/users/dashboard');
   } catch (error) {
     global.errorMessage = error;
-    res.status(400).redirect('/users/dashboard');
+    return res.status(400).redirect('/users/dashboard');
   }
 };
 
@@ -101,12 +102,12 @@ export const likeMovie: RequestHandler = async (req, res) => {
       await getRepository(Movie).save(movie);
 
       console.log('you liked this movie');
-      res.status(200).redirect('/movies');
+      return res.status(200).redirect('/movies');
     } else {
-      res.status(400).send('You cannot like a private movie.');
+      return res.status(400).send('You cannot like a private movie.');
     }
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 'fail',
       error,
     });
@@ -135,9 +136,9 @@ export const unlikeMovie: RequestHandler = async (req, res) => {
     await getRepository(Movie).save(movie);
 
     console.log('you unliked this movie');
-    res.status(200).redirect('/movies');
+    return res.status(200).redirect('/movies');
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 'fail',
       error,
     });
@@ -159,9 +160,9 @@ export const toggleMovieVisibility: RequestHandler = async (req, res) => {
     await getRepository(Movie).save(movie);
 
     global.successMessage = 'Movie visibility been updated successfully';
-    res.status(200).redirect('/users/dashboard');
+    return res.status(200).redirect('/users/dashboard');
   } catch (error) {
     global.errorMessage = error;
-    res.status(400).redirect('/users/dashboard');
+    return res.status(400).redirect('/users/dashboard');
   }
 };
