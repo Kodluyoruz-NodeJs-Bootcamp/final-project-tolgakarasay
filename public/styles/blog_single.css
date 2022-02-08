@@ -1635,3 +1635,9 @@ section {
 .footer_social ul li a i:hover {
   color: rgba(255, 255, 255, 1);
 }
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1ad9;
+}

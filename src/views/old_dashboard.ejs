@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Welcome to your dashboard</h1>
+    <h2>Add a movie</h2>
+
+    <% if(errorMessage){ %>
+    <div class="alert alert-danger">
+        <%= errorMessage %>
+    </div>
+    <% } else if (successMessage){ %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+    <% } %>
+
+    <form action="/movies/addMovie" method="POST">
+        <input type="text" name="title" placeholder="title"><br>
+        <textarea name="description" rows="4" placeholder="description"></textarea><br>
+
+        <input type="radio" id="share" name="isShared" value=1>
+        <label for="share">Share</label><br>
+        <input type="radio" id="hide" name="isShared" value=0>
+        <label for="hide">Don't share.</label><br>
+        <input type="submit" value="Submit">
+
+    </form>
+
+    <h1>Movies you added</h1>
+    <% if(userMovies.length > 0){ %>
+    <% for(let i=0; i<userMovies.length; i++){ %>
+
+    <div>
+        <h2><a href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title %></a></h2>
+        <div>
+            <a href="/movies/<%= userMovies[i].id %>?_method=DELETE"
+                onclick="return confirm('Are you sure you want to delete this item?')"
+                class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a>
+
+            <a href="/movies/<%= userMovies[i].id %>?_method=PUT"
+                onclick="return confirm('Are you sure you want to change visibility for this item?')"
+                class="btn btn-danger rounded-0 text-white"><span><%= userMovies[i].isShared == "1" ? "Make Private" : "Make Public" %></span></a>
+
+            <p><%= userMovies[i].description %></p>
+        </div>
+    </div>
+
+    <% } %>
+    <% } else { %>
+
+    <div>
+        You haven't added any movie yet.
+    </div>
+    <% } %>
+</body>
+
+</html>

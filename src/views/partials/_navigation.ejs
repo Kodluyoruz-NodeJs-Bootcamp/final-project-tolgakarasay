@@ -17,14 +17,12 @@
                         <% if(userIN) { %>
                         <nav class="main_nav_contaner">
                             <ul class="main_nav">
-                                <li class="<%= page_name ==='index' && 'active' %>"><a href="/">Home</a></li>
-                                <li class="<%= page_name ==='x' && 'active' %>"><a href="courses.html">Courses</a>
+                                <li class="<%= page_name ==='index' && 'active' %>"><a
+                                        href="/users/dashboard">Dashboard</a></li>
+                                <li class="<%= page_name ==='movies' && 'active' %>"><a href="/movies">Movies</a>
                                 </li>
-                                <li class="<%= page_name ==='y' && 'active' %>"><a
-                                        href="instructors.html">Instructors</a></li>
+                                <li class="<%= page_name ==='actors' && 'active' %>"><a href="/actors">Actors</a></li>
                                 <li class="<%= page_name ==='z' && 'active' %>"><a href="#">Events</a></li>
-                                <li class="<%= page_name ==='t' && 'active' %>"><a href="blog.html">Blog</a></li>
-                                <li class="<%= page_name ==='k' && 'active' %>"><a href="contact.html">Contact</a>
                                 </li>
                             </ul>
                         </nav>

@@ -1,65 +1,278 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/_header'); %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<!-- CUSTOM PART -->
+<link rel="stylesheet" type="text/css" href="/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="/styles/responsive.css">
 </head>
 
 <body>
-    <h1>Welcome to your dashboard</h1>
-    <h2>Add a movie</h2>
+	<div class="super_container">
+		<!-- END OF CUSTOM PART-->
 
-    <% if(errorMessage){ %>
-    <div class="alert alert-danger">
-        <%= errorMessage %>
-    </div>
-    <% } else if (successMessage){ %>
-    <div class="alert alert-success">
-        <%= successMessage %>
-    </div>
-    <% } %>
+		<%- include('partials/_navigation'); %>
 
-    <form action="/movies/addMovie" method="POST">
-        <input type="text" name="title" placeholder="title"><br>
-        <textarea name="description" rows="4" placeholder="description"></textarea><br>
 
-        <input type="radio" id="share" name="isShared" value=1>
-        <label for="share">Share</label><br>
-        <input type="radio" id="hide" name="isShared" value=0>
-        <label for="hide">Don't share.</label><br>
-        <input type="submit" value="Submit">
+		<!-- Home -->
 
-    </form>
+		<div class="home" style="height: 50vh;">
+			<div class="home_background" style="background-image: url(/images/index_background.jpg);"></div>
+			<div class="overlay" style="height: 50vh;"></div>
+			<div class="home_content" style="top:55%">
+				<div class="container">
+					<div class="row">
+						<div class="col text-center">
+							<h1 class="home_title">Welcome to your dashboard!</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <h1>Movies you added</h1>
-    <% if(userMovies.length > 0){ %>
-    <% for(let i=0; i<userMovies.length; i++){ %>
 
-    <div>
-        <h2><a href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title %></a></h2>
-        <div>
-            <a href="/movies/<%= userMovies[i].id %>?_method=DELETE"
-                onclick="return confirm('Are you sure you want to delete this item?')"
-                class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a>
 
-            <a href="/movies/<%= userMovies[i].id %>?_method=PUT"
-                onclick="return confirm('Are you sure you want to change visibility for this item?')"
-                class="btn btn-danger rounded-0 text-white"><span><%= userMovies[i].isShared == "1" ? "Make Private" : "Make Public" %></span></a>
 
-            <p><%= userMovies[i].description %></p>
-        </div>
-    </div>
+		<div class="container">
 
-    <% } %>
-    <% } else { %>
+			<div class="error-success-messages">
+				<% if(errorMessage){ %>
+				<div class="alert alert-danger">
+					<%= errorMessage %>
+				</div>
+				<% } else if (successMessage){ %>
+				<div class="alert alert-success">
+					<%= successMessage %>
+				</div>
+				<% } %>
+			</div>
 
-    <div>
-        You haven't added any movie yet.
-    </div>
-    <% } %>
+			<div class="row add-movie-container" style="padding: 50px;">
+
+
+
+				<!-- ADD NEW MOVIE -->
+				<div class="movie-form-container col-lg-4">
+
+					<div class="form_title"><i class="fa fa-plus"></i> Add a new movie</div>
+					<form method="POST" action="/movies/addMovie" class="contact_form">
+						<div class="row contact_row">
+							<div class="col-lg-12 contact_col">
+								<input type="text" class="col-lg-12" name="title" placeholder="title" required>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<textarea class="col-lg-12" name="description" rows="4" placeholder="description"
+									required></textarea>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<input type="radio" id="share1" name="isShared" value=1>
+								<label for="share1">Share</label><br>
+								<input type="radio" id="hide1" name="isShared" value=0>
+								<label for="hide1">Don't share.</label><br>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<button type="submit" class="form_button trans_200">add</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!-- ADD NEW ACTOR -->
+				<div class="movie-form-container col-lg-4">
+
+					<div class="form_title"><i class="fa fa-plus"></i> Add a new actor</div>
+					<form method="POST" action="/movies/addMovie" class="contact_form">
+						<div class="row contact_row">
+							<div class="col-lg-12 contact_col">
+								<input type="text" class="col-lg-12" name="fullname" placeholder="fullname" required>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<textarea class="col-lg-12" name="description" rows="4" placeholder="description"
+									required></textarea>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<input type="radio" id="share2" name="isShared" value=1>
+								<label for="share2">Share</label><br>
+								<input type="radio" id="hide2" name="isShared" value=0>
+								<label for="hide2">Don't share.</label><br>
+							</div>
+							<div class="col-lg-12 contact_col">
+								<button type="submit" class="form_button trans_200">add</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Courses -->
+
+		<div class="courses" style="background-color: #f8f8f8;">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="section_title text-center">Movies you added</h1>
+					</div>
+				</div>
+				<div class="row courses_row">
+
+					<% if(userMovies.length > 0){ %>
+					<% for(let i=0; i<userMovies.length; i++){ %>
+
+					<!-- Course -->
+					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 course_col">
+						<div class="course">
+							<div class="course_image"><img src="/images/course_1.jpg" alt=""></div>
+							<div class="course_body">
+								<div class="course_title"><a
+										href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title.substring(0, 30) %></a>
+								</div>
+								<div class="course_info">
+									<ul>
+										<li><%= userMovies[i].isShared == "0" ? "Private" : "Public" %></li>
+									</ul>
+								</div>
+								<div class="course_text">
+									<p><%= userMovies[i].description.substring(0, 70)%></p>
+								</div>
+							</div>
+							<div class="course_footer d-flex flex-row align-items-center justify-content-space-between">
+								<a href="/movies/<%= userMovies[i].id %>?_method=PUT"
+									onclick="return confirm('Are you sure you want to change visibility for this item?')"
+									class="btn btn-outline-info btn-sm"><span><%= userMovies[i].isShared == "1" ? "Make Private" : "Make Public" %></span></a>
+								<a href="/movies/<%= userMovies[i].id %>?_method=DELETE"
+									onclick="return confirm('Are you sure you want to delete this item?')"
+									class="btn btn-outline-danger btn-sm"><span>DELETE</span></a>
+							</div>
+						</div>
+					</div>
+
+					<% } %>
+
+
+					<% } else { %>
+
+					<div>
+						You haven't added any movie yet.
+					</div>
+					<% } %>
+
+
+				</div>
+				<!-- Pagination -->
+
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-lg">
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+
+		<!-- Instructors -->
+
+		<div class="instructors">
+			<div class="instructors_background" style="background-image:url(images/instructors_background.png)"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="section_title text-center">Actors you added</h1>
+					</div>
+				</div>
+				<div class="row instructors_row">
+
+					<!-- Instructor -->
+					<div class="col-lg-4 instructor_col">
+						<div class="instructor text-center">
+							<div class="instructor_image_container">
+								<div class="instructor_image"><img src="/images/instructor_1.jpg" alt=""></div>
+							</div>
+							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
+							<div class="instructor_title">Teacher</div>
+							<div class="instructor_text">
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
+									metus in, sagittis fringilla tortor.</p>
+							</div>
+							<div class="instructor_social">
+								<ul>
+									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Instructor -->
+					<div class="col-lg-4 instructor_col">
+						<div class="instructor text-center">
+							<div class="instructor_image_container">
+								<div class="instructor_image"><img src="/images/instructor_2.jpg" alt=""></div>
+							</div>
+							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
+							<div class="instructor_title">Teacher</div>
+							<div class="instructor_text">
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
+									metus in, sagittis fringilla tortor.</p>
+							</div>
+							<div class="instructor_social">
+								<ul>
+									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Instructor -->
+					<div class="col-lg-4 instructor_col">
+						<div class="instructor text-center">
+							<div class="instructor_image_container">
+								<div class="instructor_image"><img src="/images/instructor_3.jpg" alt=""></div>
+							</div>
+							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
+							<div class="instructor_title">Teacher</div>
+							<div class="instructor_text">
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
+									metus in, sagittis fringilla tortor.</p>
+							</div>
+							<div class="instructor_social">
+								<ul>
+									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<%- include('partials/_footer'); %>
+
+		<script src="/js/jquery-3.2.1.min.js"></script>
+		<script src="/styles/bootstrap4/popper.js"></script>
+		<script src="/styles/bootstrap4/bootstrap.min.js"></script>
+		<script src="/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+		<script src="/plugins/easing/easing.js"></script>
+		<script src="/js/custom.js"></script>
 </body>
 
 </html>
