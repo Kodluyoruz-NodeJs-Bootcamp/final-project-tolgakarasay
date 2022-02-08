@@ -1,15 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Movie from './Movie';
 import User from './User';
 
@@ -18,14 +7,14 @@ export class MovieLike {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @ManyToOne(() => User, {
+  @ManyToOne(() => User, (user) => user.movie_likes, {
     eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   public user: User;
 
-  @ManyToOne(() => Movie, {
+  @ManyToOne(() => Movie, (movie) => movie.movie_likes, {
     eager: true,
     onDelete: 'CASCADE',
   })

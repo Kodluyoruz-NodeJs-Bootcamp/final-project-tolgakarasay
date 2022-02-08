@@ -25,6 +25,7 @@ export class Movie {
   public title: string;
 
   @Column('text')
+  @IsNotEmpty()
   public description: string;
 
   @Column('int', { default: 0 })
@@ -42,6 +43,9 @@ export class Movie {
 
   @OneToMany(() => MovieReview, (movie_review) => movie_review.movie)
   public movie_reviews: MovieReview[];
+
+  @OneToMany(() => MovieLike, (movie_like) => movie_like.movie)
+  public movie_likes: MovieLike[];
 
   @Column()
   @CreateDateColumn()
