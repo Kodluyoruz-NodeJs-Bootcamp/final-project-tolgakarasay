@@ -6,6 +6,7 @@ import { User } from '../entity/User';
 import { getRepository } from 'typeorm';
 import { Movie } from '../entity/Movie';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
+import Actor from '../entity/Actor';
 
 // Add extra variables to SessionData
 declare module 'express-session' {
@@ -121,11 +122,19 @@ export const getDashboardPage: RequestHandler = async (req, res) => {
     where: { user },
     order: { createdAt: 'DESC' },
   });
+
+  const userActors = await getRepository(Actor).find({
+    where: { user },
+    order: { createdAt: 'DESC' },
+  });
+
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     errorMessage: global.errorMessage,
     succesMessage: global.successMessage,
     userMovies,
+    userActors,
   });
+
   res.on('finish', resetGlobals);
 };
