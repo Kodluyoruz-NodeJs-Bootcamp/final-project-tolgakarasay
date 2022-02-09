@@ -31,22 +31,25 @@ export const addMovie: RequestHandler = async (req, res) => {
       return res.status(400).redirect('/users/dashboard');
     }
 
-    // get name and data of uploaded image file
-    const imageName = req.files.image['name'];
-    const imageData = req.files.image['data'];
+    let url = undefined;
+    // if user has uploaded an image
+    if (req.files) {
+      // get name and data of uploaded image file
+      const imageName = req.files.image['name'];
+      const imageData = req.files.image['data'];
 
-    // set upload directory
-    const uploadDir = 'public/uploads';
+      // set upload directory
+      const uploadDir = 'public/uploads';
 
-    // if upload directory doesn't exist, create the directory
-    if (!fs.existsSync('./' + uploadDir)) {
-      fs.mkdirSync('./' + uploadDir);
+      // if upload directory doesn't exist, create the directory
+      if (!fs.existsSync('./' + uploadDir)) {
+        fs.mkdirSync('./' + uploadDir);
+      }
+
+      // write uploaded image file to the specified directory
+      fs.writeFileSync(uploadDir + '/' + imageName, imageData);
+      url = '/uploads/' + imageName;
     }
-
-    // write uploaded image file to the specified directory
-    fs.writeFileSync(uploadDir + '/' + imageName, imageData);
-    const url = '/uploads/' + imageName;
-
     // Create a new movie
     const movie = getRepository(Movie).create({
       url,
@@ -108,8 +111,13 @@ export const deleteMovie: RequestHandler = async (req, res) => {
       id,
     });
 
-    // remove movie image
-    fs.unlinkSync('public/' + movie.url);
+    // remove movie image if exists. But don't delete the default image.
+    if (
+      fs.existsSync('./public/' + movie.url) &&
+      movie.url != '/images/cinema.jpg'
+    ) {
+      fs.unlinkSync('public/' + movie.url);
+    }
 
     await getRepository(Movie).delete(id);
     global.successMessage = 'Movie has been deleted successfully';

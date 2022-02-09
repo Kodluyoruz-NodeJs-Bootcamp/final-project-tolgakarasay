@@ -16,7 +16,7 @@ export class Movie {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
+  @Column({ default: '/images/cinema.jpg' })
   public url: string;
 
   @Column()
