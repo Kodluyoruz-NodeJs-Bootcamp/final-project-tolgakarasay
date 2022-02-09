@@ -10,7 +10,7 @@ import * as fs from 'fs';
 
 import * as express from 'express';
 const app = express();
-const fileUpload = require('express-fileupload'); // modülü kullanıma alıyoruz.
+const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
 //________________________________________________________
@@ -97,7 +97,11 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
     order: { createdAt: 'DESC' },
   });
 
-  return res.render('movies', { allSharedMovies, moviesLikedByUser });
+  return res.render('movies', {
+    allSharedMovies,
+    moviesLikedByUser,
+    page_name: 'movies',
+  });
 };
 
 //________________________________________________________

@@ -1,46 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/_header'); %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<!-- CUSTOM PART -->
+<link rel="stylesheet" type="text/css" href="/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="/styles/responsive.css">
 </head>
 
 <body>
-    <% if(allSharedMovies.length > 0){ %>
-    <% for(let i=0; i<allSharedMovies.length; i++){ %>
+	<div class="super_container">
+		<!-- END OF CUSTOM PART-->
 
-    <div>
-        <h2><a href="/movies/<%= allSharedMovies[i].id %>"><%= allSharedMovies[i].title %></a></h2>
-        <% if(!moviesLikedByUser.includes(allSharedMovies[i].id)){ %>
-        <form method="POST" action="/movies/like">
-            <input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
-            <input type="hidden" name="requestAddress" value="/movies">
-            <button class="btn btn-lg btn-default text-white"><span>LIKE</span></button>
-        </form>
-        <% } else { %>
-        <form method="POST" action="/movies/unlike">
-            <input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
-            <input type="hidden" name="requestAddress" value="/movies">
-            <button class="btn btn-lg btn-warning text-white"><span>UNLIKE</span></button>
-        </form>
-        <% } %>
+		<%- include('partials/_navigation'); %>
 
-        <p><%= allSharedMovies[i].likeCount %> likes</p>
-        <p><%= allSharedMovies[i].description %></p>
-        <p>added by <%= allSharedMovies[i].user.username %></p>
-    </div>
 
-    <% } %>
-    <% } else { %>
 
-    <div>
-        There is no movie in the database yet
-    </div>
-    <% } %>
 
+
+
+
+		<div class="container">
+
+			<div class="error-success-messages">
+				<% if(errorMessage){ %>
+				<div class="alert alert-danger">
+					<%= errorMessage %>
+				</div>
+				<% } else if (successMessage){ %>
+				<div class="alert alert-success">
+					<%= successMessage %>
+				</div>
+				<% } %>
+			</div>
+
+
+		</div>
+
+		<!-- Courses -->
+
+		<div class="courses" style="background-color: #f8f8f8;">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="section_title text-center">All shared movies from all users</h1>
+					</div>
+				</div>
+				<div class="row courses_row">
+
+					<% if(allSharedMovies.length > 0){ %>
+					<% for(let i=0; i<allSharedMovies.length; i++){ %>
+
+					<!-- Course -->
+					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 course_col">
+						<div class="course">
+							<div class="course_image"><img src="<%= allSharedMovies[i].url %>" alt=""></div>
+							<div class="course_body">
+								<div class="course_title"><a
+										href="/movies/<%= allSharedMovies[i].id %>"><%= allSharedMovies[i].title.substring(0, 30) %></a>
+								</div>
+								<div class="course_info">
+									<ul>
+										<li>Shared by <%= allSharedMovies[i].user.username %></li>
+									</ul>
+								</div>
+								<div class="course_text">
+									<p><%= allSharedMovies[i].description.substring(0, 70)%></p>
+								</div>
+							</div>
+							<div class="course_footer align-items-right justify-content-space-between">
+								<% if(!moviesLikedByUser.includes(allSharedMovies[i].id)){ %>
+								<form method="POST" action="/movies/like">
+									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
+									<input type="hidden" name="requestAddress" value="/movies">
+									<button class="btn btn-outline-danger" type="submit"><i class="fa fa-heart"></i>
+										&nbsp&nbsp<%= allSharedMovies[i].likeCount %>&nbsp
+										like</button>
+								</form>
+								<% } else { %>
+								<form method="POST" action="/movies/unlike">
+									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
+									<input type="hidden" name="requestAddress" value="/movies">
+									<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
+										&nbsp&nbsp<%= allSharedMovies[i].likeCount %>&nbsp
+										like</button>
+								</form>
+								<% } %>
+							</div>
+						</div>
+					</div>
+
+					<% } %>
+				</div>
+				<!-- Pagination -->
+
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-lg">
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+				<% } else { %>
+
+				<div style="margin:auto; margin-bottom: 150px;">
+					There is no public movies to show.
+				</div>
+				<% } %>
+
+			</div>
+		</div>
+
+
+
+		<%- include('partials/_footer'); %>
+
+		<script src="/js/jquery-3.2.1.min.js"></script>
+		<script src="/styles/bootstrap4/popper.js"></script>
+		<script src="/styles/bootstrap4/bootstrap.min.js"></script>
+		<script src="/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+		<script src="/plugins/easing/easing.js"></script>
+		<script src="/js/custom.js"></script>
 </body>
 
 </html>
