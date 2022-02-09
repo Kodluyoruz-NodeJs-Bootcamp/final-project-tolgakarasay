@@ -1,0 +1,154 @@
+<%- include('partials/_header'); %>
+<!-- CUSTOM PART -->
+<link rel="stylesheet" type="text/css" href="/styles/blog_single.css">
+<link rel="stylesheet" type="text/css" href="/styles/blog_single_responsive.css">
+</head>
+
+<body>
+	<div class="super_container">
+		<!-- END OF CUSTOM PART-->
+
+		<%- include('partials/_navigation'); %>
+
+		<!-- Blog Image -->
+		<div class="blog_top_image">
+			<div class="blog_top">
+				<div class="blog_background parallax-window" data-parallax="scroll" data-image-src="<%= actor.url %>"
+					data-speed="0.8"></div>
+				<div class="overlay"></div>
+			</div>
+		</div>
+
+		<!-- Blog Content -->
+
+		<div class="blog_container">
+			<div class="container">
+				<div class="row blog_content_row">
+					<div class="col">
+						<div class="blog_content">
+							<div class="blog_post_title_container">
+								<div class="blog_title"><%= actor.fullname %></div>
+							</div>
+							<div class="blog_text">
+								<p><%= actor.bio %> </p>
+							</div>
+							<div
+								class="blog_post_footer d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+								<div class="blog_post_author d-flex flex-row align-items-center justify-content-start">
+									<div class="author_image">
+										<div><img src="<%= actor.user.avatarUrl %>" alt="" style="width:34px;"></div>
+									</div>
+									<div class="author_info">
+										<ul>
+											<li><a href="#"><%= actor.user.username %></a></li>
+											<li><%= actor.createdAt %> </li>
+										</ul>
+									</div>
+								</div>
+								<div class="blog_post_share ml-lg-auto">
+									<% if(!actorsLikedByUser.includes(actor.id)){ %>
+									<form method="POST" action="/actors/like">
+										<input type="hidden" name="id" value="<%= actor.id %>">
+										<input type="hidden" name="requestAddress" value="/actors/<%= actor.id %>">
+										<button class="btn btn-outline-danger" type="submit"><i class="fa fa-heart"></i>
+											&nbsp&nbsp<%= actor.likeCount %>&nbsp
+											like</button>
+									</form>
+									<% } else { %>
+									<form method="POST" action="/actors/unlike">
+										<input type="hidden" name="id" value="<%= actor.id %>">
+										<input type="hidden" name="requestAddress" value="/actors/<%= actor.id %>">
+										<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
+											&nbsp&nbsp<%= actor.likeCount %>&nbsp
+											like</button>
+									</form>
+									<% } %>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Actor Reviews -->
+				<div class="row register">
+					<div class="col-lg-6 offset-lg-3">
+						<div class="register_form_title">Post a Comment</div>
+
+						<!-- Actor Review Form -->
+						<div class="register_form_container">
+							<form method="POST" action="/actors/addReview" id="register_form" class="register_form">
+								<div class="row register_row">
+									<input type="hidden" name="id" value="<%= actor.id %>">
+									<div class="col-lg-12 register_col">
+										<textarea class="form_input form_text" placeholder="Comment" name="text"
+											required="required"></textarea>
+									</div>
+									<div class="col">
+										<button type="submit" class="form_button trans_200">post a comment</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- Actor Review Form (End) -->
+
+					</div>
+				</div>
+
+				<div class="row comments">
+					<div class="col-lg-6 offset-lg-3">
+						<div class="comments_title">Comments <span>(<%= actor.reviewCount %>)</span></div>
+
+						<% if(actor.reviewCount>0){ %>
+
+						<div class="comments_container">
+
+							<ul class="comments_list">
+								<% for(let i =0; i<actorReviews.length; i++){ %>
+								<li class="comment">
+									<div class="comment_content">
+										<div
+											class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+											<div class="comment_image">
+												<div><img src="<%= actorReviews[i].user.avatarUrl %>" alt=""></div>
+											</div>
+											<div class="comment_info">
+												<div class="comment_name"><a
+														href="#"><%= actorReviews[i].user.username %>
+													</a>
+												</div>
+												<div class="comment_time"><%= actorReviews[i].createdAt %></div>
+											</div>
+										</div>
+										<div class="comment_text">
+											<p><%= actorReviews[i].text %> </p>
+										</div>
+									</div>
+								</li>
+								<% } %>
+							</ul>
+
+						</div>
+
+						<div class="comments_more">
+							<div class="comments_more_button"><a href="#">load more</a></div>
+						</div>
+
+						<% } %>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<%- include('partials/_footer'); %>
+
+		<script src="/js/jquery-3.2.1.min.js"></script>
+		<script src="/styles/bootstrap4/popper.js"></script>
+		<script src="/styles/bootstrap4/bootstrap.min.js"></script>
+		<script src="/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+		<script src="/plugins/easing/easing.js"></script>
+		<script src="/plugins/parallax-js-master/parallax.min.js"></script>
+		<script src="/js/blog_single.js"></script>
+</body>
+
+</html>

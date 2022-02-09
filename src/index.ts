@@ -12,6 +12,7 @@ import { Session } from './entity/Session';
 import userRoute from './routes/userRoute';
 import pageRoute from './routes/pageRoute';
 import movieRoute from './routes/movieRoute';
+import actorRoute from './routes/actorRoute';
 
 const app = express();
 
@@ -70,6 +71,7 @@ global.successMessage = null;
   app.use('/', pageRoute);
   app.use('/users', userRoute);
   app.use('/movies', movieRoute);
+  app.use('/actors', actorRoute);
 
   // START THE SERVER
   const { API_PORT } = process.env;

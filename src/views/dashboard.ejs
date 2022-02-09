@@ -214,9 +214,9 @@
 			</div>
 		</div>
 
-		<!------------------>
-		<!----- MOVIES ----->
-		<!------------------>
+		<!------------------------------------------------------------------------>
+		<!--                         DISPLAY MOVIES                             -->
+		<!------------------------------------------------------------------------>
 		<div class="courses" style="background-color: #f8f8f8;">
 			<div class="container">
 				<div class="row">
@@ -231,7 +231,7 @@
 					<!------------------>
 					<!-- SINGLE MOVIE -->
 					<!------------------>
-					<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 course_col">
+					<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 course_col">
 						<div class="course">
 							<div class="course_image"><img src="<%= userMovies[i].url %>" alt=""></div>
 							<div class="course_body">
@@ -247,16 +247,17 @@
 								</div>
 
 								<span>
-									<a href="/movies/visibility<%= userMovies[i].id %>?_method=PUT"
-										onclick="return confirm('Are you sure you want to change visibility for this item?')"
+
+									<!-- TOGGLE MOVIE VISIBILITY : Modal Button-->
+									<button data-toggle="modal" data-target="#toggleMovie<%= userMovies[i].id %>"
 										class="btn <%= userMovies[i].isShared == "1" ? "btn-outline-secondary" : "btn-outline-info" %> btn-sm">
 										<% if(userMovies[i].isShared){ %>
 										<span><i class="fa fa-ban"></i>&nbsp&nbspHide</i></span>
 										<% } else { %>
 										<span><i class="fa fa-send"></i>&nbsp&nbspShare</i></span>
 										<% } %>
+									</button>
 
-									</a>
 								</span>
 
 								<div class="course_text">
@@ -276,6 +277,63 @@
 							</div>
 						</div>
 					</div>
+
+
+
+
+					<!-------------------------->
+					<!-- TOGGLE MOVIE : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="toggleMovie<%= userMovies[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="top: 30vh;">
+							<div class=" modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
+
+											<form method="POST"
+												action="/movies/visibility<%= userMovies[i].id %>?_method=PUT"
+												class="form-horizontal">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<p>Are you sure you want to
+															<%= userMovies[i].isShared == 0 ? "share" : "hide" %> this
+															movie?</p>
+
+														<input type="hidden" name="id" value="<%= userMovies[i].id %>"
+															class="form-control" placeholder="title" required>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-<%= userMovies[i].isShared == 0 ? "primary" : "secondary" %> btn-radius btn-brd grd1">
+															<%= userMovies[i].isShared == 0 ? "SHARE" : "HIDE" %>
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															CANCEL
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
 
 					<!-------------------------->
 					<!-- UPDATE MOVIE : Modal -->
@@ -430,10 +488,11 @@
 			</div>
 		</div>
 
-		<!-- Instructors -->
+		<!------------------------------------------------------------------------>
+		<!--                         DISPLAY ACTORS                             -->
+		<!------------------------------------------------------------------------>
 
 		<div class="instructors">
-			<div class="instructors_background" style="background-image:url(images/instructors_background.png)"></div>
 			<div class="container">
 				<div class="row">
 					<div class="col">
@@ -442,72 +501,238 @@
 				</div>
 				<div class="row instructors_row">
 
-					<!-- Instructor -->
-					<div class="col-lg-4 instructor_col">
+					<% if(userActors.length > 0){ %>
+					<% for(let i=0; i<userActors.length; i++){ %>
+					<!------------------>
+					<!-- SINGLE ACTOR -->
+					<!------------------>
+					<div class="col-xl-3 col-lg-4 col-md-6  col-sm-12 instructor_col">
 						<div class="instructor text-center">
 							<div class="instructor_image_container">
-								<div class="instructor_image"><img src="/images/instructor_1.jpg" alt=""></div>
+								<div class="instructor_image"><img src="<%= userActors[i].url %>" alt=""></div>
 							</div>
-							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
-							<div class="instructor_title">Teacher</div>
-							<div class="instructor_text">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
-									metus in, sagittis fringilla tortor.</p>
-							</div>
-							<div class="instructor_social">
-								<ul>
-									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								</ul>
+							<div class="actor_body">
+								<div class="instructor_name"><a
+										href="/actors/<%= userActors[i].id %>"><%= userActors[i].fullname.substring(0, 30) %></a>
+								</div>
+								<div class="instructor_title">
+									<%= userActors[i].isShared == "0" ? "Private" : "Public" %>
+								</div>
+
+								<div>
+
+									<!-- TOGGLE ACTOR VISIBILITY : Modal Button-->
+									<button data-toggle="modal" data-target="#toggleActor<%= userActors[i].id %>"
+										class="btn <%= userActors[i].isShared == "1" ? "btn-outline-secondary" : "btn-outline-info" %> btn-sm">
+										<% if(userActors[i].isShared){ %>
+										<span><i class="fa fa-ban"></i>&nbsp&nbspHide</i></span>
+										<% } else { %>
+										<span><i class="fa fa-send"></i>&nbsp&nbspShare</i></span>
+										<% } %>
+									</button>
+
+								</div>
+
+								<div class="instructor_text">
+									<p><%= userActors[i].bio.substring(0, 70) %></p>
+								</div>
+								<div class="instructor_social">
+									<ul>
+										<!-- UPDATE ACTOR : Modal Button-->
+										<li><button class="btn btn-info btn-sm" data-toggle="modal"
+												data-target="#updateActor<%= userActors[i].id %>"><span><i
+														class="fa fa-edit"></i>&nbsp&nbspUPDATE</span></button></li>
+										<!-- DELETE ACTOR : Modal Button-->
+										<li></li><button class="btn btn-danger btn-sm" data-toggle="modal"
+											data-target="#deleteActor<%= userActors[i].id %>"><span><i
+													class="fa fa-trash"></i>&nbsp&nbspDELETE</span></button></li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Instructor -->
-					<div class="col-lg-4 instructor_col">
-						<div class="instructor text-center">
-							<div class="instructor_image_container">
-								<div class="instructor_image"><img src="/images/instructor_2.jpg" alt=""></div>
-							</div>
-							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
-							<div class="instructor_title">Teacher</div>
-							<div class="instructor_text">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
-									metus in, sagittis fringilla tortor.</p>
-							</div>
-							<div class="instructor_social">
-								<ul>
-									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								</ul>
+
+
+
+					<!-------------------------->
+					<!-- TOGGLE ACTOR : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="toggleActor<%= userActors[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="top: 30vh;">
+							<div class=" modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
+
+											<form method="POST"
+												action="/actors/visibility<%= userActors[i].id %>?_method=PUT"
+												class="form-horizontal">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<p>Are you sure you want to
+															<%= userActors[i].isShared == 0 ? "share" : "hide" %> this
+															actor?</p>
+
+														<input type="hidden" name="id" value="<%= userActors[i].id %>"
+															class="form-control" required>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-<%= userActors[i].isShared == 0 ? "primary" : "secondary" %> btn-radius btn-brd grd1">
+															<%= userActors[i].isShared == 0 ? "SHARE" : "HIDE" %>
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															CANCEL
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Instructor -->
-					<div class="col-lg-4 instructor_col">
-						<div class="instructor text-center">
-							<div class="instructor_image_container">
-								<div class="instructor_image"><img src="/images/instructor_3.jpg" alt=""></div>
-							</div>
-							<div class="instructor_name"><a href="instructors.html">Sarah Parker</a></div>
-							<div class="instructor_title">Teacher</div>
-							<div class="instructor_text">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce enim nulla, mollis eu
-									metus in, sagittis fringilla tortor.</p>
-							</div>
-							<div class="instructor_social">
-								<ul>
-									<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								</ul>
+
+
+
+
+					<!-------------------------->
+					<!-- UPDATE ACTOR : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="updateActor<%= userActors[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
+											<form method="POST" action="/actors/<%= userActors[i].id %>?_method=PUT"
+												class="form-horizontal" enctype="multipart/form-data">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="fullname"
+															value="<%= userActors[i].fullname %>" class="form-control"
+															placeholder="fullname" required>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea rows="8" name="bio" class="form-control"
+															placeholder="bio"
+															required><%= userActors[i].bio %></textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<select class="form-control" name="isShared">
+															<option value=0
+																<%= userActors[i].isShared==0 && "selected='selected'"%>>
+																Private
+															</option>
+															<option value=1
+																<%= userActors[i].isShared==1 && "selected='selected'"%>>
+																Public
+															</option>
+														</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<label for="actorPhoto">Choose a photo:</label>
+														<input type="file" id="actorPhoto" name="image"
+															class="form-control-file rounded-0" accept="image/*">
+													</div>
+												</div>
+
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-primary btn-radius btn-brd grd1">
+															Submit
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															Cancel
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+					<!-------------------------->
+					<!-- DELETE ACTOR : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="deleteActor<%= userActors[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="top: 30vh;">
+							<div class=" modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
 
+											<form method="POST" action="/actors/<%= userActors[i].id %>?_method=DELETE"
+												class="form-horizontal">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<p>Are you sure you want to delete this actor?</p>
+
+														<input type="hidden" name="id" value="<%= userActors[i].id %>"
+															class="form-control" placeholder="title" required>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-danger btn-radius btn-brd grd1">
+															DELETE
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															CANCEL
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- SINGLE ACTOR : END -->
+					<% } %>
+
+					<% } else { %>
+					<div style="margin:auto; margin-bottom: 40px;">
+						You haven't added any actor yet.
+					</div>
+					<% } %>
 				</div>
 			</div>
 		</div>

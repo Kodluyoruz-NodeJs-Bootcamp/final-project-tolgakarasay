@@ -1101,7 +1101,7 @@ section {
 }
 .instructor {
   padding-top: 40px;
-  padding-bottom: 34px;
+  padding-bottom: 70px;
   padding-left: 30px;
   padding-right: 30px;
 }
@@ -1124,6 +1124,7 @@ section {
 }
 .instructor_image img {
   max-width: 100%;
+  max-height: 100%;
 }
 .instructor_name {
   margin-top: 18px;
@@ -1147,12 +1148,13 @@ section {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.3);
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 .instructor_text {
   margin-top: 16px;
 }
 .instructor_social {
-  margin-top: 22px;
+  margin-top: 10px;
 }
 .instructor_social ul li {
   display: inline-block;
@@ -2083,4 +2085,13 @@ label {
 a,
 p {
   overflow-wrap: break-word;
+}
+
+.actor_body {
+  height: 27vh;
+}
+
+.instructor_text {
+  height: 10vh;
+  overflow: hidden;
 }
