@@ -1,5 +1,8 @@
 import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import Actor from './Actor';
+import ActorLike from './ActorLike';
+import ActorReview from './ActorReview';
 import Movie from './Movie';
 import MovieLike from './MovieLike';
 import MovieReview from './MovieReview';
@@ -35,6 +38,15 @@ export class User {
 
   @OneToMany(() => MovieLike, (movie_like) => movie_like.user)
   public movie_likes: MovieLike[];
+
+  @OneToMany(() => Actor, (actor) => actor.user)
+  public actors: Actor[];
+
+  @OneToMany(() => ActorReview, (actor_review) => actor_review.user)
+  public actor_reviews: ActorReview[];
+
+  @OneToMany(() => ActorLike, (actor_like) => actor_like.user)
+  public actor_likes: ActorLike[];
 }
 
 export default User;
