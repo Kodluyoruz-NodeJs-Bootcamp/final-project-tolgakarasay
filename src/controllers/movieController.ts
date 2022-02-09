@@ -74,6 +74,75 @@ export const addMovie: RequestHandler = async (req, res) => {
 
 //________________________________________________________
 //                                                        |
+//                   UPDATE A MOVIE                       |
+//________________________________________________________|
+export const updateMovie: RequestHandler = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const movie = await getRepository(Movie).findOne({
+      id,
+    });
+
+    if (movie.user.id == global.userIN) {
+      // Find out which user is adding the movie
+      const user = await getRepository(User).findOne({ id: global.userIN });
+
+      // Get movie info
+      const { title, description, isShared } = req.body;
+
+      // Validate movie info
+      if (!(title && description)) {
+        global.errorMessage = 'Title and description are both required!';
+        return res.status(400).redirect('/users/dashboard');
+      }
+
+      movie.title = title;
+      movie.description = description;
+
+      if (isShared != undefined) {
+        movie.isShared = isShared;
+      }
+
+      // if user has uploaded an image
+      if (req.files) {
+        // get name and data of uploaded image file
+        const imageName = req.files.image['name'];
+        const imageData = req.files.image['data'];
+
+        // set upload directory
+        const uploadDir = 'public/uploads';
+
+        // if upload directory doesn't exist, create the directory
+        if (!fs.existsSync('./' + uploadDir)) {
+          fs.mkdirSync('./' + uploadDir);
+        }
+
+        // write uploaded image file to the specified directory
+        fs.writeFileSync(uploadDir + '/' + imageName, imageData);
+        const url = '/uploads/' + imageName;
+
+        movie.url = url;
+      }
+
+      // Save the new movie to database
+      await getRepository(Movie).save(movie);
+
+      // Redirect user to dashboard page
+      global.successMessage = 'Movie has been updated successfully';
+      return res.status(201).redirect('/users/dashboard');
+    } else {
+      global.errorMessage = 'Only movie owner can update the movie!';
+      return res.status(400).redirect('/users/dashboard');
+    }
+  } catch (err) {
+    console.log(err);
+    global.errorMessage = err.sqlMessage;
+    return res.status(400).redirect('/users/dashboard');
+  }
+};
+
+//________________________________________________________
+//                                                        |
 //               LIST ALL SHARED MOVIES                   |
 //________________________________________________________|
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
@@ -114,18 +183,22 @@ export const deleteMovie: RequestHandler = async (req, res) => {
     const movie = await getRepository(Movie).findOne({
       id,
     });
-
-    // remove movie image if exists. But don't delete the default image.
-    if (
-      fs.existsSync('./public/' + movie.url) &&
-      movie.url != '/images/cinema.jpg'
-    ) {
-      fs.unlinkSync('public/' + movie.url);
+    // Check if user is the owner of the movie
+    if (movie.user.id == global.userIN) {
+      // remove movie image if exists. But don't delete the default image.
+      if (
+        fs.existsSync('./public/' + movie.url) &&
+        movie.url != '/images/cinema.jpg'
+      ) {
+        fs.unlinkSync('public/' + movie.url);
+      }
+      await getRepository(Movie).delete(id);
+      global.successMessage = 'Movie has been deleted successfully';
+      return res.status(200).redirect('/users/dashboard');
+    } else {
+      global.errorMessage = 'Only the movie owner can delete the movie.';
+      return res.status(400).redirect('/users/dashboard');
     }
-
-    await getRepository(Movie).delete(id);
-    global.successMessage = 'Movie has been deleted successfully';
-    return res.status(200).redirect('/users/dashboard');
   } catch (error) {
     global.errorMessage = error;
     return res.status(400).redirect('/users/dashboard');

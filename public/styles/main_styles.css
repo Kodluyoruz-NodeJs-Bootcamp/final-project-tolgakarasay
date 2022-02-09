@@ -147,7 +147,7 @@ h5::selection,
 h6::selection {
 }
 .form-control {
-  color: #db5246;
+  color: #757575;
 }
 section {
   display: block;
@@ -947,7 +947,7 @@ section {
 *********************************/
 
 .courses {
-  padding-top: 90px;
+  padding-top: 0px;
   padding-bottom: 80px;
   background: #ffffff;
 }
@@ -979,7 +979,7 @@ section {
   padding-top: 19px;
   padding-bottom: 47px;
   background: #ffffff;
-  height: 25vh;
+  height: 27vh;
 }
 .course_title a {
   font-family: 'Montserrat', sans-serif;
@@ -2055,7 +2055,7 @@ section {
 }
 
 .add-movie-container {
-  display: inline-flexbox;
+  display: block;
 }
 
 .movie-form-container {

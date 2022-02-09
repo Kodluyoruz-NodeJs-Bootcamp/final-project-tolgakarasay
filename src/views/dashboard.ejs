@@ -32,7 +32,9 @@
 
 
 		<div class="container">
-
+			<!-------------------------------------->
+			<!-- ERROR & SUCCESS MESSAGES DISPLAY -->
+			<!-------------------------------------->
 			<div class="error-success-messages">
 				<% if(errorMessage){ %>
 				<div class="alert alert-danger">
@@ -44,80 +46,177 @@
 				</div>
 				<% } %>
 			</div>
-
+			<!------------------------------------>
+			<!-- ADD ACTOR OR MOVIE : Container -->
+			<!------------------------------------>
 			<div class="row add-movie-container" style="padding: 50px;">
+				<div style="display: block; justify-content: center;">
+					<!-- ADD MOVIE : Modal Button -->
+					<div class="col-lg-12 text-center" style="padding: 10px;">
+						<button class="btn btn-lg btn-primary " href="#" data-toggle="modal"
+							data-target="#addMovie"><span><i class="fa fa-plus"></i> Add a
+								new
+								movie</span></button>
+					</div>
 
-
-
-				<!-- ADD NEW MOVIE -->
-				<div class="movie-form-container col-lg-4">
-
-					<div class="form_title"><i class="fa fa-plus"></i> Add a new movie</div>
-					<form method="POST" action="/movies/addMovie" class="contact_form" enctype="multipart/form-data">
-						<div class="row contact_row">
-							<div class="col-lg-12 contact_col">
-								<input type="text" class="col-lg-12" name="title" placeholder="title" required>
-							</div>
-							<div class="col-lg-12 contact_col">
-								<textarea class="col-lg-12" name="description" rows="4" placeholder="description"
-									required></textarea>
-							</div>
-							<div class="col-lg-12 contact_col">
-								<input type="radio" id="share1" name="isShared" value=1>
-								<label for="share1">Share</label><br>
-								<input type="radio" id="hide1" name="isShared" value=0>
-								<label for="hide1">Don't share.</label><br>
-							</div>
-
-							<div class="col-lg-12 contact_col">
-								<label for="moviePhoto">Choose a photo:</label>
-								<input type="file" id="moviePhoto" name="image" class="form-control-file rounded-0">
-							</div>
-
-							<div class="col-lg-12 contact_col">
-								<button type="submit" class="form_button trans_200">add</button>
-							</div>
-						</div>
-					</form>
+					<!-- ADD ACTOR : Modal Button -->
+					<div class="col-lg-12 text-center ">
+						<button class="btn btn-lg btn-secondary" href="#" data-toggle="modal"
+							data-target="#addActor"><span><i class="fa fa-plus"></i> Add a new
+								actor</span></button>
+					</div>
 				</div>
 
-				<!-- ADD NEW ACTOR -->
-				<div class="movie-form-container col-lg-4">
+				<!-- ADD MOVIE : Modal -->
+				<div class="modal fade" id="addMovie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-body customer-box">
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div class="tab-pane active" id="Login">
+										<form method="POST" action="/movies/addMovie" class="form-horizontal"
+											enctype="multipart/form-data">
+											<!-- title -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="text" name="title" class="form-control"
+														placeholder="title" required>
+												</div>
+											</div>
 
-					<div class="form_title"><i class="fa fa-plus"></i> Add a new actor</div>
-					<form method="POST" action="/movies/addMovie" class="contact_form">
-						<div class="row contact_row">
-							<div class="col-lg-12 contact_col">
-								<input type="text" class="col-lg-12" name="fullname" placeholder="fullname" required>
-							</div>
-							<div class="col-lg-12 contact_col">
-								<textarea class="col-lg-12" name="description" rows="4" placeholder="description"
-									required></textarea>
-							</div>
-							<div class="col-lg-12 contact_col">
-								<input type="radio" id="share2" name="isShared" value=1>
-								<label for="share2">Share</label><br>
-								<input type="radio" id="hide2" name="isShared" value=0>
-								<label for="hide2">Don't share.</label><br>
-							</div>
+											<!-- description -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea rows="8" name="description" class="form-control"
+														placeholder="description" required></textarea>
+												</div>
+											</div>
 
-							<div class="col-lg-12 contact_col">
-								<label for="actorPhoto">Choose a photo:</label>
-								<input type="file" id="actorPhoto" name="image" class="form-control-file rounded-0">
-							</div>
+											<!-- isShared -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<select class="form-control" name="isShared">
 
-							<div class="col-lg-12 contact_col">
-								<button type="submit" class="form_button trans_200">add</button>
+														<option value=0>Private</option>
+
+														<option value=1>Public</option>
+
+													</select>
+												</div>
+											</div>
+
+											<!-- photo upload -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<label for="moviePhoto">Choose a photo:</label>
+													<input type="file" id="moviePhoto" name="image"
+														class="form-control-file rounded-0" accept="image/*">
+												</div>
+											</div>
+
+											<!-- submit and cancel -->
+											<div class="row">
+												<div class="col-sm-10"
+													style="display: flex;justify-content: center;margin: auto;">
+													<button type="submit" style="margin: 0 10px;"
+														class="btn btn-outline-primary btn-radius btn-brd grd1">
+														Submit
+													</button>
+													<button type="submit" style="margin: 0 10px;"
+														class="btn btn-outline-dark btn-radius btn-brd grd1"
+														data-dismiss="modal" aria-hidden="true">
+														Cancel
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
+				<!-- ADD MOVIE : Modal - END -->
+
+				<!-- ADD ACTOR : Modal -->
+				<div class="modal fade" id="addActor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-body customer-box">
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div class="tab-pane active" id="Login">
+										<form method="POST" action="/actors/addActor" class="form-horizontal"
+											enctype="multipart/form-data">
+											<!-- fullname -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="text" name="fullname" class="form-control"
+														placeholder="fullname" required>
+												</div>
+											</div>
+
+											<!-- bio -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea rows="8" name="bio" class="form-control" placeholder="bio"
+														required></textarea>
+												</div>
+											</div>
+
+											<!-- isShared -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<select class="form-control" name="isShared">
+
+														<option value=0>Private</option>
+
+														<option value=1>Public</option>
+
+													</select>
+												</div>
+											</div>
+
+											<!-- photo upload -->
+											<div class="form-group">
+												<div class="col-sm-12">
+													<label for="moviePhoto">Choose a photo:</label>
+													<input type="file" id="moviePhoto" name="image"
+														class="form-control-file rounded-0" accept="image/*">
+												</div>
+											</div>
+
+											<!-- submit and cancel -->
+											<div class="row">
+												<div class="col-sm-10"
+													style="display: flex;justify-content: center;margin: auto;">
+													<button type="submit" style="margin: 0 10px;"
+														class="btn btn-outline-primary btn-radius btn-brd grd1">
+														Submit
+													</button>
+													<button type="submit" style="margin: 0 10px;"
+														class="btn btn-outline-dark btn-radius btn-brd grd1"
+														data-dismiss="modal" aria-hidden="true">
+														Cancel
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- ADD ACTOR : Modal - END -->
 
 			</div>
 		</div>
 
-		<!-- Courses -->
-
+		<!------------------>
+		<!----- MOVIES ----->
+		<!------------------>
 		<div class="courses" style="background-color: #f8f8f8;">
 			<div class="container">
 				<div class="row">
@@ -129,31 +228,170 @@
 
 					<% if(userMovies.length > 0){ %>
 					<% for(let i=0; i<userMovies.length; i++){ %>
-
-					<!-- Course -->
-					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 course_col">
+					<!------------------>
+					<!-- SINGLE MOVIE -->
+					<!------------------>
+					<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 course_col">
 						<div class="course">
 							<div class="course_image"><img src="<%= userMovies[i].url %>" alt=""></div>
 							<div class="course_body">
 								<div class="course_title"><a
 										href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title.substring(0, 30) %></a>
 								</div>
+
 								<div class="course_info">
 									<ul>
 										<li><%= userMovies[i].isShared == "0" ? "Private" : "Public" %></li>
 									</ul>
+
 								</div>
+
+								<span>
+									<a href="/movies/visibility<%= userMovies[i].id %>?_method=PUT"
+										onclick="return confirm('Are you sure you want to change visibility for this item?')"
+										class="btn <%= userMovies[i].isShared == "1" ? "btn-outline-secondary" : "btn-outline-info" %> btn-sm">
+										<% if(userMovies[i].isShared){ %>
+										<span><i class="fa fa-ban"></i>&nbsp&nbspHide</i></span>
+										<% } else { %>
+										<span><i class="fa fa-send"></i>&nbsp&nbspShare</i></span>
+										<% } %>
+
+									</a>
+								</span>
+
 								<div class="course_text">
 									<p><%= userMovies[i].description.substring(0, 70)%></p>
 								</div>
 							</div>
 							<div class="course_footer d-flex flex-row align-items-center justify-content-space-between">
-								<a href="/movies/<%= userMovies[i].id %>?_method=PUT"
-									onclick="return confirm('Are you sure you want to change visibility for this item?')"
-									class="btn btn-outline-info btn-sm"><span><%= userMovies[i].isShared == "1" ? "Make Private" : "Make Public" %></span></a>
-								<a href="/movies/<%= userMovies[i].id %>?_method=DELETE"
-									onclick="return confirm('Are you sure you want to delete this item?')"
-									class="btn btn-outline-danger btn-sm"><span>DELETE</span></a>
+								<!-- UPDATE MOVIE : Modal Button-->
+								<button class="btn btn-info btn-sm" data-toggle="modal"
+									data-target="#updateMovie<%= userMovies[i].id %>"><span><i
+											class="fa fa-edit"></i>&nbsp&nbspUPDATE</span></button>
+								<!-- DELETE MOVIE : Modal Button-->
+								<button class="btn btn-danger btn-sm" data-toggle="modal"
+									data-target="#deleteMovie<%= userMovies[i].id %>"><span><i
+											class="fa fa-trash"></i>&nbsp&nbspDELETE</span></button>
+
+							</div>
+						</div>
+					</div>
+
+					<!-------------------------->
+					<!-- UPDATE MOVIE : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="updateMovie<%= userMovies[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
+											<form method="POST" action="/movies/<%= userMovies[i].id %>?_method=PUT"
+												class="form-horizontal" enctype="multipart/form-data">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="title"
+															value="<%= userMovies[i].title %>" class="form-control"
+															placeholder="title" required>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea rows="8" name="description" class="form-control"
+															placeholder="description"
+															required><%= userMovies[i].description %></textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<select class="form-control" name="isShared">
+															<option value=0
+																<%= userMovies[i].isShared==0 && "selected='selected'"%>>
+																Private
+															</option>
+															<option value=1
+																<%= userMovies[i].isShared==1 && "selected='selected'"%>>
+																Public
+															</option>
+														</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-12">
+														<label for="moviePhoto">Choose a photo:</label>
+														<input type="file" id="moviePhoto" name="image"
+															class="form-control-file rounded-0" accept="image/*">
+													</div>
+												</div>
+
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-primary btn-radius btn-brd grd1">
+															Submit
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															Cancel
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-------------------------->
+					<!-- DELETE MOVIE : Modal -->
+					<!-------------------------->
+					<div class="modal fade" id="deleteMovie<%= userMovies[i].id %>" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel">
+						<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="top: 30vh;">
+							<div class=" modal-content">
+								<div class="modal-body customer-box">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div class="tab-pane active" id="Login">
+
+											<form method="POST" action="/movies/<%= userMovies[i].id %>?_method=DELETE"
+												class="form-horizontal">
+												<div class="form-group">
+													<div class="col-sm-12">
+														<p>Are you sure you want to delete this movie?</p>
+
+														<input type="hidden" name="id" value="<%= userMovies[i].id %>"
+															class="form-control" placeholder="title" required>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-sm-10"
+														style="display: flex;justify-content: center;margin: auto;">
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-danger btn-radius btn-brd grd1">
+															DELETE
+														</button>
+														<button type="submit" style="margin: 0 10px;"
+															class="btn btn-outline-dark btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															CANCEL
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
