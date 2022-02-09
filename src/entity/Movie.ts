@@ -6,7 +6,6 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import User from './User';
 import MovieReview from './MovieReview';
@@ -17,8 +16,8 @@ export class Movie {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  //   @Column()
-  //   public url: string;
+  @Column()
+  public url: string;
 
   @Column()
   @IsNotEmpty()
@@ -30,6 +29,9 @@ export class Movie {
 
   @Column('int', { default: 0 })
   public likeCount: number;
+
+  @Column('int', { default: 0 })
+  public reviewCount: number;
 
   @Column('boolean', { default: false })
   public isShared: boolean = false;

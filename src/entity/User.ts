@@ -11,6 +11,7 @@ export class User {
 
   @Column({ unique: true })
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @Column({ unique: true })
@@ -22,6 +23,9 @@ export class User {
   @Length(4, 20)
   @IsNotEmpty()
   password: string;
+
+  @Column({ default: '/images/profile/13.png' })
+  avatarUrl: string;
 
   @OneToMany(() => Movie, (movie) => movie.user)
   public movies: Movie[];

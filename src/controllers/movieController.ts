@@ -5,31 +5,58 @@ import { getRepository } from 'typeorm';
 import Movie from '../entity/Movie';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import MovieLike from '../entity/MovieLike';
+import MovieReview from '../entity/MovieReview';
+import * as fs from 'fs';
 
-// ADD A MOVIE
+import * as express from 'express';
+const app = express();
+const fileUpload = require('express-fileupload'); // modülü kullanıma alıyoruz.
+app.use(fileUpload());
+
+//________________________________________________________
+//                                                        |
+//                     ADD A MOVIE                        |
+//________________________________________________________|
 export const addMovie: RequestHandler = async (req, res) => {
   try {
+    // Find out which user is adding the movie
+    const user = await getRepository(User).findOne({ id: global.userIN });
+
     // Get movie info
     const { title, description, isShared } = req.body;
 
-    // Validate user info
+    // Validate movie info
     if (!(title && description)) {
       global.errorMessage = 'All input is required';
       return res.status(400).redirect('/users/dashboard');
     }
 
-    console.log(global.userIN);
-    const user = await getRepository(User).findOne({ id: global.userIN });
+    // get name and data of uploaded image file
+    const imageName = req.files.image['name'];
+    const imageData = req.files.image['data'];
 
-    // Create new movie
+    // set upload directory
+    const uploadDir = 'public/uploads';
+
+    // if upload directory doesn't exist, create the directory
+    if (!fs.existsSync('./' + uploadDir)) {
+      fs.mkdirSync('./' + uploadDir);
+    }
+
+    // write uploaded image file to the specified directory
+    fs.writeFileSync(uploadDir + '/' + imageName, imageData);
+    const url = '/uploads/' + imageName;
+
+    // Create a new movie
     const movie = getRepository(Movie).create({
+      url,
       title,
       description,
       isShared,
       user,
     });
 
-    // Save new user to database
+    // Save the new movie to database
     await getRepository(Movie).save(movie);
 
     // Redirect user to dashboard page
@@ -42,7 +69,10 @@ export const addMovie: RequestHandler = async (req, res) => {
   }
 };
 
-// LIST ALL SHARED MOVIES
+//________________________________________________________
+//                                                        |
+//               LIST ALL SHARED MOVIES                   |
+//________________________________________________________|
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
   const user = await getRepository(User).findOne({
     id: global.userIN,
@@ -67,10 +97,20 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
   return res.render('movies', { allSharedMovies, moviesLikedByUser });
 };
 
-// DELETE A MOVIE
+//________________________________________________________
+//                                                        |
+//                    DELETE A MOVIE                      |
+//________________________________________________________|
 export const deleteMovie: RequestHandler = async (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
   try {
+    const movie = await getRepository(Movie).findOne({
+      id,
+    });
+
+    // remove movie image
+    fs.unlinkSync('public/' + movie.url);
+
     await getRepository(Movie).delete(id);
     global.successMessage = 'Movie has been deleted successfully';
     return res.status(200).redirect('/users/dashboard');
@@ -80,75 +120,10 @@ export const deleteMovie: RequestHandler = async (req, res) => {
   }
 };
 
-// LIKE A MOVIE
-export const likeMovie: RequestHandler = async (req, res) => {
-  try {
-    const user = await getRepository(User).findOne({
-      id: global.userIN,
-    });
-
-    const movie = await getRepository(Movie).findOne({
-      id: req.body.id,
-    });
-
-    if (movie.isShared || movie.user.id == global.userIN) {
-      const like = getRepository(MovieLike).create({
-        user,
-        movie,
-      });
-      await getRepository(MovieLike).save(like);
-
-      movie.likeCount++;
-      await getRepository(Movie).save(movie);
-
-      console.log('you liked this movie');
-      return res.status(200).redirect(req.body.requestAddress);
-    } else {
-      return res
-        .status(400)
-        .send('Only the movie owner can like a private movie.');
-    }
-  } catch (error) {
-    return res.status(400).json({
-      status: 'fail',
-      error,
-    });
-  }
-};
-
-// UNLIKE A MOVIE
-export const unlikeMovie: RequestHandler = async (req, res) => {
-  try {
-    const user = await getRepository(User).findOne({
-      id: global.userIN,
-    });
-
-    const movie = await getRepository(Movie).findOne({
-      id: req.body.id,
-    });
-
-    const like = await getRepository(MovieLike).findOne({
-      user,
-      movie,
-    });
-
-    await getRepository(MovieLike).delete(like.id);
-
-    movie.likeCount--;
-    await getRepository(Movie).save(movie);
-
-    console.log('you unliked this movie');
-    console.log(req.body.requestAddress);
-    return res.status(200).redirect(req.body.requestAddress);
-  } catch (error) {
-    return res.status(400).json({
-      status: 'fail',
-      error,
-    });
-  }
-};
-
-// TOGGLE MOVIE VISIBILITY
+//________________________________________________________
+//                                                        |
+//                 TOGGLE MOVIE VISIBILITY                |
+//________________________________________________________|
 export const toggleMovieVisibility: RequestHandler = async (req, res) => {
   try {
     const id = req.params.id;
@@ -170,13 +145,20 @@ export const toggleMovieVisibility: RequestHandler = async (req, res) => {
   }
 };
 
-// GET SINGLE MOVIE PAGE
+//________________________________________________________
+//                                                        |
+//                 GET SINGLE MOVIE PAGE                  |
+//________________________________________________________|
 export const getMovie: RequestHandler = async (req, res) => {
   try {
     const movie = await getRepository(Movie).findOne(req.params.id);
 
     const user = await getRepository(User).findOne({
       id: global.userIN,
+    });
+
+    const movieReviews = await getRepository(MovieReview).find({
+      movie,
     });
 
     const likesByUser = await getRepository(MovieLike).find({ user: user });
@@ -197,13 +179,16 @@ export const getMovie: RequestHandler = async (req, res) => {
           "Access Denied. A private movie's page can only be seen by its creator."
         );
     }
+
     res.status(200).render('movie', {
       page_name: 'movie',
       movie,
+      movieReviews,
       moviesLikedByUser,
     });
   } catch (error) {
     global.errorMessage = error;
+    console.log(error);
     res.status(400).redirect('/movies');
   }
   res.on('finish', resetGlobals);

@@ -13,8 +13,8 @@
 		<!-- Blog Image -->
 		<div class="blog_top_image">
 			<div class="blog_top">
-				<div class="blog_background parallax-window" data-parallax="scroll"
-					data-image-src="/images/index_background.jpg" data-speed="0.8"></div>
+				<div class="blog_background parallax-window" data-parallax="scroll" data-image-src="<%= movie.url %>"
+					data-speed="0.8"></div>
 				<div class="overlay"></div>
 			</div>
 		</div>
@@ -36,7 +36,7 @@
 								class="blog_post_footer d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
 								<div class="blog_post_author d-flex flex-row align-items-center justify-content-start">
 									<div class="author_image">
-										<div><img src="/images/blog_author.jpg" alt=""></div>
+										<div><img src="<%= movie.user.avatarUrl %>" alt="" style="width:34px;"></div>
 									</div>
 									<div class="author_info">
 										<ul>
@@ -69,14 +69,18 @@
 					</div>
 				</div>
 
+				<!-- Movie Reviews -->
 				<div class="row register">
 					<div class="col-lg-6 offset-lg-3">
 						<div class="register_form_title">Post a Comment</div>
+
+						<!-- Movie Review Form -->
 						<div class="register_form_container">
-							<form action="#" id="register_form" class="register_form">
+							<form method="POST" action="/movies/addReview" id="register_form" class="register_form">
 								<div class="row register_row">
+									<input type="hidden" name="id" value="<%= movie.id %>">
 									<div class="col-lg-12 register_col">
-										<textarea class="form_input form_text" placeholder="Comment"
+										<textarea class="form_input form_text" placeholder="Comment" name="text"
 											required="required"></textarea>
 									</div>
 									<div class="col">
@@ -85,56 +89,52 @@
 								</div>
 							</form>
 						</div>
+						<!-- Movie Review Form (End) -->
+
 					</div>
 				</div>
 
 				<div class="row comments">
 					<div class="col-lg-6 offset-lg-3">
-						<div class="comments_title">Comments <span>(12)</span></div>
+						<div class="comments_title">Comments <span>(<%= movie.reviewCount %>)</span></div>
+
+						<% if(movie.reviewCount>0){ %>
+
 						<div class="comments_container">
+
 							<ul class="comments_list">
+								<% for(let i =0; i<movieReviews.length; i++){ %>
 								<li class="comment">
 									<div class="comment_content">
 										<div
 											class="comment_title_container d-flex flex-row align-items-center justify-content-start">
 											<div class="comment_image">
-												<div><img src="/images/blog_author.jpg" alt=""></div>
+												<div><img src="<%= movieReviews[i].user.avatarUrl %>" alt=""></div>
 											</div>
 											<div class="comment_info">
-												<div class="comment_name"><a href="#">Sarah Parker</a></div>
-												<div class="comment_time">Sep 29, 2017 at 9:48 am</div>
+												<div class="comment_name"><a
+														href="#"><%= movieReviews[i].user.username %>
+													</a>
+												</div>
+												<div class="comment_time"><%= movieReviews[i].createdAt %></div>
 											</div>
 										</div>
 										<div class="comment_text">
-											<p>Nam egestas lorem ex, sit amet commodo tortor faucibus a. Suspendisse
-												commodo, turpis a dapibus fermentum, turpis ipsum.</p>
+											<p><%= movieReviews[i].text %> </p>
 										</div>
 									</div>
-									<ul>
-										<li class="comment">
-											<div class="comment_content">
-												<div
-													class="comment_title_container d-flex flex-row align-items-center justify-content-start">
-													<div class="comment_image">
-														<div><img src="/images/blog_author.jpg" alt=""></div>
-													</div>
-													<div class="comment_info">
-														<div class="comment_name"><a href="#">Sarah Parker</a></div>
-														<div class="comment_time">Sep 29, 2017 at 9:48 am</div>
-													</div>
-												</div>
-												<div class="comment_text">
-													<p>Sed imperdiet ante quis felis tempor hendrerit.</p>
-												</div>
-											</div>
-										</li>
-									</ul>
 								</li>
+								<% } %>
 							</ul>
+
 						</div>
+
 						<div class="comments_more">
 							<div class="comments_more_button"><a href="#">load more</a></div>
 						</div>
+
+						<% } %>
+
 					</div>
 				</div>
 			</div>

@@ -7,10 +7,13 @@ import * as methodOverride from 'method-override';
 import { createConnection, getConnection } from 'typeorm';
 import { TypeormStore } from 'typeorm-store';
 require('dotenv').config();
+const fileUpload = require('express-fileupload');
 import { Session } from './entity/Session';
 import userRoute from './routes/userRoute';
 import pageRoute from './routes/pageRoute';
 import movieRoute from './routes/movieRoute';
+
+const app = express();
 
 // ADD GLOBAL VARIABLES
 declare global {
@@ -26,8 +29,6 @@ global.userIN = null;
 global.errorMessage = null;
 global.successMessage = null;
 
-const app = express();
-
 (async () => {
   // DB CONNECTION
   await createConnection();
@@ -42,6 +43,7 @@ const app = express();
       methods: ['POST', 'GET'],
     })
   );
+  app.use(fileUpload());
 
   // SESSION
   app.use(
@@ -65,11 +67,6 @@ const app = express();
   app.set('view engine', 'ejs');
 
   // ROUTES
-
-  // app.use('*', (req, res, next) => {
-  //   global.userIN = req.session.userID;
-  //   next();
-  // });
   app.use('/', pageRoute);
   app.use('/users', userRoute);
   app.use('/movies', movieRoute);

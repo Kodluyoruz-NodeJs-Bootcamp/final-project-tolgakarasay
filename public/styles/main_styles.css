@@ -969,7 +969,9 @@ section {
   width: 100%;
 }
 .course_image img {
-  max-width: 100%;
+  object-fit: cover;
+  width: 100%;
+  height: 30vh;
 }
 .course_body {
   padding-left: 30px;
@@ -2076,4 +2078,9 @@ section {
 
 label {
   color: #000000;
+}
+
+a,
+p {
+  overflow-wrap: break-word;
 }

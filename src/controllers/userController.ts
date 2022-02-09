@@ -39,11 +39,15 @@ export const registerUser: RequestHandler = async (req, res) => {
     // Encrypt user password
     const encryptedPassword = await bcrypt.hash(password, 10);
 
+    // Assign a random profile photo
+    const number = 10 + Math.floor(23 * Math.random());
+    const avatarUrl = `/images/profile/${number}.png`;
     // Create new user
     const user = getRepository(User).create({
       email,
       username,
       password: encryptedPassword,
+      avatarUrl,
     });
 
     // Save new user to database

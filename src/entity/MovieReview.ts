@@ -3,9 +3,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import Movie from './Movie';
 import User from './User';
@@ -15,7 +15,7 @@ export class MovieReview {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
+  @Column('text')
   @IsNotEmpty()
   public text: string;
 
@@ -23,21 +23,19 @@ export class MovieReview {
     eager: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   public user: User;
 
   @ManyToOne(() => Movie, (movie) => movie.movie_reviews, {
     eager: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   public movie: Movie;
 
   @Column()
   @CreateDateColumn()
   public createdAt: Date;
-
-  @Column()
-  @UpdateDateColumn()
-  public updatedAt: Date;
 }
 
 export default MovieReview;

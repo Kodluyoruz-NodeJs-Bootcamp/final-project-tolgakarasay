@@ -53,7 +53,7 @@
 				<div class="movie-form-container col-lg-4">
 
 					<div class="form_title"><i class="fa fa-plus"></i> Add a new movie</div>
-					<form method="POST" action="/movies/addMovie" class="contact_form">
+					<form method="POST" action="/movies/addMovie" class="contact_form" enctype="multipart/form-data">
 						<div class="row contact_row">
 							<div class="col-lg-12 contact_col">
 								<input type="text" class="col-lg-12" name="title" placeholder="title" required>
@@ -68,6 +68,12 @@
 								<input type="radio" id="hide1" name="isShared" value=0>
 								<label for="hide1">Don't share.</label><br>
 							</div>
+
+							<div class="col-lg-12 contact_col">
+								<label for="moviePhoto">Choose a photo:</label>
+								<input type="file" id="moviePhoto" name="image" class="form-control-file rounded-0">
+							</div>
+
 							<div class="col-lg-12 contact_col">
 								<button type="submit" class="form_button trans_200">add</button>
 							</div>
@@ -94,6 +100,12 @@
 								<input type="radio" id="hide2" name="isShared" value=0>
 								<label for="hide2">Don't share.</label><br>
 							</div>
+
+							<div class="col-lg-12 contact_col">
+								<label for="actorPhoto">Choose a photo:</label>
+								<input type="file" id="actorPhoto" name="image" class="form-control-file rounded-0">
+							</div>
+
 							<div class="col-lg-12 contact_col">
 								<button type="submit" class="form_button trans_200">add</button>
 							</div>
@@ -121,7 +133,7 @@
 					<!-- Course -->
 					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 course_col">
 						<div class="course">
-							<div class="course_image"><img src="/images/course_1.jpg" alt=""></div>
+							<div class="course_image"><img src="<%= userMovies[i].url %>" alt=""></div>
 							<div class="course_body">
 								<div class="course_title"><a
 										href="/movies/<%= userMovies[i].id %>"><%= userMovies[i].title.substring(0, 30) %></a>
@@ -147,16 +159,6 @@
 					</div>
 
 					<% } %>
-
-
-					<% } else { %>
-
-					<div>
-						You haven't added any movie yet.
-					</div>
-					<% } %>
-
-
 				</div>
 				<!-- Pagination -->
 
@@ -179,6 +181,13 @@
 						</li>
 					</ul>
 				</nav>
+
+				<% } else { %>
+
+				<div style="margin:auto; margin-bottom: 40px;">
+					You haven't added any movie yet.
+				</div>
+				<% } %>
 
 			</div>
 		</div>
