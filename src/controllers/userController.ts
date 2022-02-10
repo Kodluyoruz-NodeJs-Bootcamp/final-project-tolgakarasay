@@ -82,7 +82,7 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
         { id: user.id, browser: req.headers['user-agent'] },
         process.env.TOKEN_KEY,
         {
-          expiresIn: '5m',
+          expiresIn: '10m',
         }
       );
 
