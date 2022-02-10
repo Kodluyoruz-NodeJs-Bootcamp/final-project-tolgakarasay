@@ -159,31 +159,47 @@ export const updateActor: RequestHandler = async (req, res) => {
 //               LIST ALL SHARED ACTORS                   |
 //________________________________________________________|
 export const listAllSharedActors: RequestHandler = async (req, res) => {
-  const user = await getRepository(User).findOne({
-    id: global.userIN,
-  });
-
-  const likesByUser = await getRepository(ActorLike).find({ user: user });
-  const actorsLikedByUser = [];
-
-  if (likesByUser[0]) {
-    likesByUser.map((item) => {
-      actorsLikedByUser.push(item.actor.id);
+  try {
+    const currentPage = Number(req.query.page) || 1;
+    const actorsPerPage = 8;
+    const totalNumberOfActors = await getRepository(Actor).count({
+      isShared: true,
     });
+
+    const user = await getRepository(User).findOne({
+      id: global.userIN,
+    });
+
+    const likesByUser = await getRepository(ActorLike).find({ user: user });
+    const actorsLikedByUser = [];
+
+    if (likesByUser[0]) {
+      likesByUser.map((item) => {
+        actorsLikedByUser.push(item.actor.id);
+      });
+    }
+
+    const allSharedActors = await getRepository(Actor).find({
+      where: { isShared: true },
+      order: { createdAt: 'DESC' },
+      skip: (currentPage - 1) * actorsPerPage,
+      take: actorsPerPage,
+    });
+
+    return res.render('actors', {
+      allSharedActors,
+      actorsLikedByUser,
+      page_name: 'actors',
+      actorsPerPage,
+      totalNumberOfPages: Math.ceil(totalNumberOfActors / actorsPerPage),
+      currentPage,
+    });
+  } catch (err) {
+    console.log(err);
+    global.errorMessage = err.sqlMessage;
+    res.status(400).redirect('/users/dashboard');
   }
-
-  console.log(actorsLikedByUser);
-
-  const allSharedActors = await getRepository(Actor).find({
-    where: { isShared: true },
-    order: { createdAt: 'DESC' },
-  });
-
-  return res.render('actors', {
-    allSharedActors,
-    actorsLikedByUser,
-    page_name: 'actors',
-  });
+  res.on('finish', resetGlobals);
 };
 
 //________________________________________________________

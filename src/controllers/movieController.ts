@@ -10,6 +10,7 @@ import * as fs from 'fs';
 
 import * as express from 'express';
 import { nanoid } from 'nanoid';
+import { count } from 'console';
 const app = express();
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
@@ -159,31 +160,47 @@ export const updateMovie: RequestHandler = async (req, res) => {
 //               LIST ALL SHARED MOVIES                   |
 //________________________________________________________|
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
-  const user = await getRepository(User).findOne({
-    id: global.userIN,
-  });
-
-  const likesByUser = await getRepository(MovieLike).find({ user: user });
-  const moviesLikedByUser = [];
-
-  if (likesByUser[0]) {
-    likesByUser.map((item) => {
-      moviesLikedByUser.push(item.movie.id);
+  try {
+    const currentPage = Number(req.query.page) || 1;
+    const moviesPerPage = 8;
+    const totalNumberOfMovies = await getRepository(Movie).count({
+      isShared: true,
     });
+
+    const user = await getRepository(User).findOne({
+      id: global.userIN,
+    });
+
+    const likesByUser = await getRepository(MovieLike).find({ user: user });
+    const moviesLikedByUser = [];
+
+    if (likesByUser[0]) {
+      likesByUser.map((item) => {
+        moviesLikedByUser.push(item.movie.id);
+      });
+    }
+
+    const allSharedMovies = await getRepository(Movie).find({
+      where: { isShared: true },
+      order: { createdAt: 'DESC' },
+      skip: (currentPage - 1) * moviesPerPage,
+      take: moviesPerPage,
+    });
+
+    return res.render('movies', {
+      allSharedMovies,
+      moviesLikedByUser,
+      page_name: 'movies',
+      moviesPerPage,
+      totalNumberOfPages: Math.ceil(totalNumberOfMovies / moviesPerPage),
+      currentPage,
+    });
+  } catch (err) {
+    console.log(err);
+    global.errorMessage = err.sqlMessage;
+    res.status(400).redirect('/users/dashboard');
   }
-
-  console.log(moviesLikedByUser);
-
-  const allSharedMovies = await getRepository(Movie).find({
-    where: { isShared: true },
-    order: { createdAt: 'DESC' },
-  });
-
-  return res.render('movies', {
-    allSharedMovies,
-    moviesLikedByUser,
-    page_name: 'movies',
-  });
+  res.on('finish', resetGlobals);
 };
 
 //________________________________________________________
