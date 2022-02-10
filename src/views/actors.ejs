@@ -1,0 +1,129 @@
+<%- include('partials/_header'); %>
+
+<!-- CUSTOM PART -->
+<link rel="stylesheet" type="text/css" href="/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="/styles/responsive.css">
+</head>
+
+<body>
+	<div class="super_container">
+		<!-- END OF CUSTOM PART-->
+
+		<%- include('partials/_navigation'); %>
+
+
+
+
+
+
+
+		<div class="container">
+
+			<div class="error-success-messages">
+				<% if(errorMessage){ %>
+				<div class="alert alert-danger">
+					<%= errorMessage %>
+				</div>
+				<% } else if (successMessage){ %>
+				<div class="alert alert-success">
+					<%= successMessage %>
+				</div>
+				<% } %>
+			</div>
+
+
+		</div>
+
+		<!------------------------------------------------------------------------>
+		<!--                         DISPLAY ACTORS                             -->
+		<!------------------------------------------------------------------------>
+
+		<div class="instructors" style="background-color: #f8f8f8; padding-top: 90px;">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="section_title text-center">All shared actors from all users</h1>
+					</div>
+				</div>
+				<div class="row instructors_row">
+
+					<% if(allSharedActors.length > 0){ %>
+					<% for(let i=0; i<allSharedActors.length; i++){ %>
+					<!------------------>
+					<!-- SINGLE ACTOR -->
+					<!------------------>
+					<div class="col-xl-3 col-lg-4 col-md-6  col-sm-12 instructor_col">
+						<div class="instructor text-center">
+							<div class="instructor_image_container">
+								<div class="instructor_image"><img src="<%= allSharedActors[i].url %>" alt=""></div>
+							</div>
+							<div class="actor_body">
+								<div class="instructor_name"><a
+										href="/actors/<%= allSharedActors[i].id %>"><%= allSharedActors[i].fullname.substring(0, 30) %></a>
+								</div>
+								<div class="instructor_title">
+									Shared by <%= allSharedActors[i].user.username %></span>
+								</div>
+
+								<div>
+
+
+
+								</div>
+
+								<div class="instructor_text">
+									<p><%= allSharedActors[i].bio.substring(0, 70) %></p>
+								</div>
+								<div class="instructor_social">
+
+									<div class="blog_post_share ml-lg-auto">
+										<% if(!actorsLikedByUser.includes(allSharedActors[i].id)){ %>
+										<form method="POST" action="/actors/like">
+											<input type="hidden" name="id" value="<%= allSharedActors[i].id %>">
+											<input type="hidden" name="requestAddress" value="/actors">
+											<button class="btn btn-outline-danger" type="submit"><i
+													class="fa fa-heart"></i>
+												&nbsp&nbsp<%= allSharedActors[i].likeCount %>&nbsp
+												like</button>
+										</form>
+										<% } else { %>
+										<form method="POST" action="/actors/unlike">
+											<input type="hidden" name="id" value="<%= allSharedActors[i].id %>">
+											<input type="hidden" name="requestAddress" value="/actors">
+											<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
+												&nbsp&nbsp<%= allSharedActors[i].likeCount %>&nbsp
+												like</button>
+										</form>
+										<% } %>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<% } %>
+
+					<% } else { %>
+					<div style="margin:auto; margin-bottom: 40px;">
+						You haven't added any actor yet.
+					</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<%- include('partials/_footer'); %>
+
+		<script src="/js/jquery-3.2.1.min.js"></script>
+		<script src="/styles/bootstrap4/popper.js"></script>
+		<script src="/styles/bootstrap4/bootstrap.min.js"></script>
+		<script src="/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+		<script src="/plugins/easing/easing.js"></script>
+		<script src="/js/custom.js"></script>
+</body>
+
+</html>

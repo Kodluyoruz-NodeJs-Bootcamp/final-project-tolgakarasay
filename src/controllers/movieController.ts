@@ -9,6 +9,7 @@ import MovieReview from '../entity/MovieReview';
 import * as fs from 'fs';
 
 import * as express from 'express';
+import { nanoid } from 'nanoid';
 const app = express();
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
@@ -35,8 +36,14 @@ export const addMovie: RequestHandler = async (req, res) => {
     // if user has uploaded an image
     if (req.files) {
       // get name and data of uploaded image file
-      const imageName = req.files.image['name'];
+      let imageName = req.files.image['name'];
       const imageData = req.files.image['data'];
+
+      // use nanoid to generate a unique filename for the image
+      if (imageName.includes('.')) {
+        let fileExtension = imageName.split('.').slice(-1);
+        imageName = nanoid(11) + '.' + fileExtension;
+      }
 
       // set upload directory
       const uploadDir = 'public/uploads';
@@ -106,8 +113,14 @@ export const updateMovie: RequestHandler = async (req, res) => {
       // if user has uploaded an image
       if (req.files) {
         // get name and data of uploaded image file
-        const imageName = req.files.image['name'];
+        let imageName = req.files.image['name'];
         const imageData = req.files.image['data'];
+
+        // use nanoid to generate a unique filename for the image
+        if (imageName.includes('.')) {
+          let fileExtension = imageName.split('.').slice(-1);
+          imageName = nanoid(11) + '.' + fileExtension;
+        }
 
         // set upload directory
         const uploadDir = 'public/uploads';
