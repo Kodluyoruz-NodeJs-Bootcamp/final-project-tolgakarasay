@@ -55,8 +55,7 @@ export class Movie {
   public createdAt: Date;
 
   @Column()
-  @UpdateDateColumn()
-  public updatedAt: Date;
+  public sharedAt: Date;
 }
 
 export default Movie;

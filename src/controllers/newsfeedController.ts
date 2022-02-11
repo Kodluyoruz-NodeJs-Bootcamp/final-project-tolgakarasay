@@ -46,13 +46,13 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
 
     const allSharedMovies = await getRepository(Movie).find({
       where: { isShared: true },
-      order: { updatedAt: 'DESC' },
+      order: { sharedAt: 'DESC' },
       take: itemsPerPage,
     });
 
     const allSharedActors = await getRepository(Actor).find({
       where: { isShared: true },
-      order: { updatedAt: 'DESC' },
+      order: { sharedAt: 'DESC' },
       take: itemsPerPage,
     });
 

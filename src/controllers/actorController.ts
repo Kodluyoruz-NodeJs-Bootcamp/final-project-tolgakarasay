@@ -64,6 +64,7 @@ export const addActor: RequestHandler = async (req, res) => {
       bio,
       isShared,
       user,
+      sharedAt: new Date(),
     });
 
     // Save the new actor to database
@@ -108,6 +109,10 @@ export const updateActor: RequestHandler = async (req, res) => {
 
       if (isShared != undefined) {
         actor.isShared = isShared;
+      }
+
+      if (isShared) {
+        actor.sharedAt = new Date();
       }
 
       // if user has uploaded an image
@@ -247,6 +252,7 @@ export const toggleActorVisibility: RequestHandler = async (req, res) => {
       actor.isShared = false;
     } else {
       actor.isShared = true;
+      actor.sharedAt = new Date();
     }
 
     await getRepository(Actor).save(actor);

@@ -22,6 +22,7 @@ export const addActorReview: RequestHandler = async (req, res) => {
     });
 
     const text = req.body.text;
+    const requestAddress = req.body.requestAddress;
 
     if (actor.isShared || actor.user.id == global.userIN) {
       const review = getRepository(ActorReview).create({
@@ -35,7 +36,7 @@ export const addActorReview: RequestHandler = async (req, res) => {
       await getRepository(Actor).save(actor);
 
       console.log('you added a review to this actor');
-      return res.status(200).redirect(`/actors/${req.body.id}`);
+      return res.status(200).redirect(requestAddress);
     } else {
       return res
         .status(400)

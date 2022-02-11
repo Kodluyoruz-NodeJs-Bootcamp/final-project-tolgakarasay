@@ -10,7 +10,7 @@ import * as fs from 'fs';
 
 import * as express from 'express';
 import { nanoid } from 'nanoid';
-import { count } from 'console';
+
 const app = express();
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
@@ -65,6 +65,7 @@ export const addMovie: RequestHandler = async (req, res) => {
       description,
       isShared,
       user,
+      sharedAt: new Date(),
     });
 
     // Save the new movie to database
@@ -106,6 +107,10 @@ export const updateMovie: RequestHandler = async (req, res) => {
 
       movie.title = title;
       movie.description = description;
+
+      if (isShared) {
+        movie.sharedAt = new Date();
+      }
 
       if (isShared != undefined) {
         movie.isShared = isShared;
@@ -248,6 +253,7 @@ export const toggleMovieVisibility: RequestHandler = async (req, res) => {
       movie.isShared = false;
     } else {
       movie.isShared = true;
+      movie.sharedAt = new Date();
     }
 
     await getRepository(Movie).save(movie);

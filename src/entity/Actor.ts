@@ -55,8 +55,7 @@ export class Actor {
   public createdAt: Date;
 
   @Column()
-  @UpdateDateColumn()
-  public updatedAt: Date;
+  public sharedAt: Date;
 }
 
 export default Actor;
