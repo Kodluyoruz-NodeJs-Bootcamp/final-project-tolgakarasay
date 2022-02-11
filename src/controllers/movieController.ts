@@ -300,6 +300,7 @@ export const getMovie: RequestHandler = async (req, res) => {
       movie,
       movieReviews,
       moviesLikedByUser,
+      user,
     });
   } catch (error) {
     global.errorMessage = error;

@@ -40,7 +40,7 @@
 									</div>
 									<div class="author_info">
 										<ul>
-											<li><a href="#"><%= movie.user.username %></a></li>
+											<li><%= movie.user.username %></li>
 											<li><%= movie.createdAt %> </li>
 										</ul>
 									</div>
@@ -69,30 +69,6 @@
 					</div>
 				</div>
 
-				<!-- Movie Reviews -->
-				<div class="row register">
-					<div class="col-lg-6 offset-lg-3">
-						<div class="register_form_title">Post a Comment</div>
-
-						<!-- Movie Review Form -->
-						<div class="register_form_container">
-							<form method="POST" action="/movies/addReview" id="register_form" class="register_form">
-								<div class="row register_row">
-									<input type="hidden" name="id" value="<%= movie.id %>">
-									<div class="col-lg-12 register_col">
-										<textarea class="form_input form_text" placeholder="Comment" name="text"
-											required="required"></textarea>
-									</div>
-									<div class="col">
-										<button type="submit" class="form_button trans_200">post a comment</button>
-									</div>
-								</div>
-							</form>
-						</div>
-						<!-- Movie Review Form (End) -->
-
-					</div>
-				</div>
 
 				<div class="row comments">
 					<div class="col-lg-6 offset-lg-3">
@@ -112,9 +88,8 @@
 												<div><img src="<%= movieReviews[i].user.avatarUrl %>" alt=""></div>
 											</div>
 											<div class="comment_info">
-												<div class="comment_name"><a
-														href="#"><%= movieReviews[i].user.username %>
-													</a>
+												<div class="comment_name">
+													<%= movieReviews[i].user.username %>
 												</div>
 												<div class="comment_time"><%= movieReviews[i].createdAt %></div>
 											</div>
@@ -129,14 +104,55 @@
 
 						</div>
 
-						<div class="comments_more">
-							<div class="comments_more_button"><a href="#">load more</a></div>
-						</div>
-
 						<% } %>
 
 					</div>
 				</div>
+
+
+				<!-- Movie Reviews -->
+				<div class="row register">
+					<div class="col-lg-6 offset-lg-3">
+						<div class="register_form_title">Post a Comment</div>
+
+						<!-- Movie Review Form -->
+						<div class="register_form_container">
+							<form method="POST" action="/movies/addReview" id="register_form" class="register_form">
+								<div class="row register_row">
+									<input type="hidden" name="id" value="<%= movie.id %>">
+									<input type="hidden" name="requestAddress" value="/movies/<%= movie.id %>">
+
+									<div class="blog_post_author d-flex flex-row align-items-center justify-content-start col-lg-12 register_col"
+										style="margin-bottom: 20px;">
+										<div class="author_image">
+											<div><img src="<%= user.avatarUrl %>" alt="" style="width:34px;">
+											</div>
+										</div>
+										<div class="author_info">
+											<ul>
+												<li><%= user.username %></li>
+											</ul>
+										</div>
+									</div>
+
+
+
+									<div class="col-lg-12 register_col">
+										<textarea class="form_input form_text" placeholder="Your comment" name="text"
+											required="required"></textarea>
+									</div>
+									<div class="col">
+										<button type="submit" class="form_button trans_200">post a comment</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- Movie Review Form (End) -->
+
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 

@@ -299,6 +299,7 @@ export const getActor: RequestHandler = async (req, res) => {
       actor,
       actorReviews,
       actorsLikedByUser,
+      user,
     });
   } catch (error) {
     global.errorMessage = error;

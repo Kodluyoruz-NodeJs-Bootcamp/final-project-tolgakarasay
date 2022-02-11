@@ -1168,10 +1168,10 @@ section {
   text-align: center;
 }
 .register_row {
-  margin-top: 38px;
+  margin-top: 0px;
 }
 .register_col {
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 .register_col:nth-child(odd) {
   padding-right: 20px;
@@ -1197,8 +1197,9 @@ section {
   border-bottom: solid 2px #2e21df;
 }
 .form_text {
-  height: 101px;
-  padding-top: 13px;
+  height: 60px;
+  padding-top: 0px;
+  border: 1px solid #888;
 }
 .form_input::-webkit-input-placeholder {
   font-size: 14px !important;
@@ -1294,7 +1295,7 @@ section {
   outline: none;
 }
 .comments {
-  margin-top: 70px;
+  margin-top: 0px;
 }
 .comments_title {
   font-family: 'Montserrat', sans-serif;
@@ -1304,8 +1305,8 @@ section {
   text-align: center;
 }
 .comments_container {
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 .comment {
   background: #ffffff;
@@ -1319,9 +1320,23 @@ section {
 }
 .comment_content {
   padding-left: 29px;
-  padding-top: 27px;
+  padding-top: 20px;
   padding-right: 30px;
-  padding-bottom: 23px;
+  padding-bottom: 15px;
+}
+
+.comment_content_top {
+  padding-left: 29px;
+  padding-top: 0px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+
+.comment_content_bottom {
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
 }
 .comment_image div {
   width: 34px;

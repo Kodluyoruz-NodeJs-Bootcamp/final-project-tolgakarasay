@@ -23,6 +23,8 @@ export const addMovieReview: RequestHandler = async (req, res) => {
 
     const text = req.body.text;
 
+    const requestAddress = req.body.requestAddress;
+
     if (movie.isShared || movie.user.id == global.userIN) {
       const review = getRepository(MovieReview).create({
         user,
@@ -35,7 +37,7 @@ export const addMovieReview: RequestHandler = async (req, res) => {
       await getRepository(Movie).save(movie);
 
       console.log('you added a review to this movie');
-      return res.status(200).redirect(`/movies/${req.body.id}`);
+      return res.status(200).redirect(requestAddress);
     } else {
       return res
         .status(400)

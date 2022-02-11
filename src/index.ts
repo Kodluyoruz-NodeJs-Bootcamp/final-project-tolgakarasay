@@ -13,6 +13,7 @@ import userRoute from './routes/userRoute';
 import pageRoute from './routes/pageRoute';
 import movieRoute from './routes/movieRoute';
 import actorRoute from './routes/actorRoute';
+import newsfeedRoute from './routes/newsfeedRoute';
 
 const app = express();
 
@@ -72,6 +73,7 @@ global.successMessage = null;
   app.use('/users', userRoute);
   app.use('/movies', movieRoute);
   app.use('/actors', actorRoute);
+  app.use('/newsfeed', newsfeedRoute);
 
   // START THE SERVER
   const { API_PORT } = process.env;

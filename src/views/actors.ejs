@@ -80,7 +80,8 @@
 										<% if(!actorsLikedByUser.includes(allSharedActors[i].id)){ %>
 										<form method="POST" action="/actors/like">
 											<input type="hidden" name="id" value="<%= allSharedActors[i].id %>">
-											<input type="hidden" name="requestAddress" value="/actors">
+											<input type="hidden" name="requestAddress"
+												value="/actors/?page=<%= currentPage %>">
 											<button class="btn btn-outline-danger" type="submit"><i
 													class="fa fa-heart"></i>
 												&nbsp&nbsp<%= allSharedActors[i].likeCount %>&nbsp
@@ -89,7 +90,8 @@
 										<% } else { %>
 										<form method="POST" action="/actors/unlike">
 											<input type="hidden" name="id" value="<%= allSharedActors[i].id %>">
-											<input type="hidden" name="requestAddress" value="/actors">
+											<input type="hidden" name="requestAddress"
+												value="/actors/?page=<%= currentPage %>">
 											<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
 												&nbsp&nbsp<%= allSharedActors[i].likeCount %>&nbsp
 												like</button>

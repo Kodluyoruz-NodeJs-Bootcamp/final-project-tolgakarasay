@@ -69,7 +69,7 @@
 								<% if(!moviesLikedByUser.includes(allSharedMovies[i].id)){ %>
 								<form method="POST" action="/movies/like">
 									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
-									<input type="hidden" name="requestAddress" value="/movies">
+									<input type="hidden" name="requestAddress" value="/movies/?page=<%= currentPage %>">
 									<button class="btn btn-outline-danger" type="submit"><i class="fa fa-heart"></i>
 										&nbsp&nbsp<%= allSharedMovies[i].likeCount %>&nbsp
 										like</button>
@@ -77,7 +77,7 @@
 								<% } else { %>
 								<form method="POST" action="/movies/unlike">
 									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
-									<input type="hidden" name="requestAddress" value="/movies">
+									<input type="hidden" name="requestAddress" value="/movies/?page=<%= currentPage %>">
 									<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
 										&nbsp&nbsp<%= allSharedMovies[i].likeCount %>&nbsp
 										like</button>
