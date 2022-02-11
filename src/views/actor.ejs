@@ -122,7 +122,7 @@
 							<form method="POST" action="/actors/addReview" id="register_form" class="register_form">
 								<div class="row register_row">
 									<input type="hidden" name="id" value="<%= actor.id %>">
-
+									<input type="hidden" name="requestAddress" value="/actors/<%= actor.id %>">
 									<div class="blog_post_author d-flex flex-row align-items-center justify-content-start col-lg-12 register_col"
 										style="margin-bottom: 20px;">
 										<div class="author_image">
