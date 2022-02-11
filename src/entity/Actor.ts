@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import User from './User';
 import ActorReview from './ActorReview';
@@ -52,6 +53,10 @@ export class Actor {
   @Column()
   @CreateDateColumn()
   public createdAt: Date;
+
+  @Column()
+  @UpdateDateColumn()
+  public updatedAt: Date;
 }
 
 export default Actor;
