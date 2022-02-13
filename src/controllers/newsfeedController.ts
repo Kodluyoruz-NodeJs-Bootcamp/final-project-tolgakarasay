@@ -16,7 +16,7 @@ import ActorReview from '../entity/ActorReview';
 //________________________________________________________|
 export const listAllSharedMovies: RequestHandler = async (req, res) => {
   try {
-    const itemsPerPage = 10;
+    const itemsPerPage = 20;
 
     const user = await getRepository(User).findOne({
       id: global.userIN,
