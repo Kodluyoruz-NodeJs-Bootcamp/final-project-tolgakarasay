@@ -14,4 +14,5 @@ router.route('/visibility:id').put(auth, movieController.toggleMovieVisibility);
 router.route('/:id').put(auth, movieController.updateMovie);
 router.route('/:id').get(auth, movieController.getMovie);
 router.route('/addReview').post(auth, movieReviewController.addMovieReview);
+
 export default router;

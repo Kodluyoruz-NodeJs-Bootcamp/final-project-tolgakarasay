@@ -14,7 +14,10 @@ import ActorReview from '../entity/ActorReview';
 //                                                        |
 //           LIST ALL SHARED MOVIES AND ACTORS            |
 //________________________________________________________|
-export const listAllSharedMovies: RequestHandler = async (req, res) => {
+export const listAllSharedMoviesAndActors: RequestHandler = async (
+  req,
+  res
+) => {
   try {
     const itemsPerPage = 20;
 
@@ -50,16 +53,20 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
       take: itemsPerPage,
     });
 
+    console.log('allsharedmovies: ' + allSharedMovies[0].title);
+
     const allSharedActors = await getRepository(Actor).find({
       where: { isShared: true },
       order: { sharedAt: 'DESC' },
       take: itemsPerPage,
     });
 
+    console.log('allsharedActors: ' + allSharedActors[0].fullname);
+
     const allMovieReviews = await getRepository(MovieReview).find();
     const allActorReviews = await getRepository(ActorReview).find();
 
-    return res.render('newsfeed', {
+    res.render('newsfeed', {
       allSharedMovies,
       allSharedActors,
       moviesLikedByUser,

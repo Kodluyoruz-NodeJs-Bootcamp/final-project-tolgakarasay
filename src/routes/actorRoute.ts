@@ -14,4 +14,5 @@ router.route('/:id').get(auth, actorController.getActor);
 router.route('/like').post(auth, actorLikeController.likeActor);
 router.route('/unlike').post(auth, actorLikeController.unlikeActor);
 router.route('/addReview').post(auth, actorReviewController.addActorReview);
+
 export default router;

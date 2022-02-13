@@ -35,7 +35,7 @@ export const addActorReview: RequestHandler = async (req, res) => {
       actor.reviewCount++;
       await getRepository(Actor).save(actor);
 
-      console.log('you added a review to this actor');
+      global.successMessage = 'Actor comment has been added successfully';
       return res.status(200).redirect(requestAddress);
     } else {
       return res

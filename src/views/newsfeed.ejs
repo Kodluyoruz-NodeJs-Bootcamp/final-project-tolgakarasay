@@ -16,15 +16,30 @@
 					<ul class="comments_list">
 
 
+						<!-------------------------------------->
+						<!-- ERROR & SUCCESS MESSAGES DISPLAY -->
+						<!-------------------------------------->
+						<div class="error-success-messages">
+							<% if(errorMessage){ %>
+							<div class="alert alert-danger">
+								<%= errorMessage %>
+							</div>
+							<% } else if (successMessage){ %>
+							<div class="alert alert-success">
+								<%= successMessage %>
+							</div>
+							<% } %>
+						</div>
+
+
 						<% if(allSharedMovies.length>0 || allSharedActors.length>0 ){ %>
 						<% let i=0, j=0; %>
-						<% while(i<allSharedMovies.length && j<allSharedActors.length && i+j < itemsPerPage){ %>
+						<% while( i+j < allSharedMovies.length + allSharedActors.length && i+j < itemsPerPage){ %>
+						<% if(i < allSharedMovies.length && j < allSharedActors.length ){ %>
 						<% if(allSharedMovies[i].sharedAt > allSharedActors[j].sharedAt ){ %>
 
 
-
-
-
+						<!-- movie buraya gelecek -->
 						<!-- movie post here -->
 						<!-- POST -->
 						<li class="comment" style="margin-bottom: 20px;">
@@ -187,15 +202,11 @@
 						<!-- movie post end -->
 
 
-
-
 						<% i++; %>
-
+						<% continue; %>
 						<% } else { %>
 
-
-
-
+						<!-- actor buraya gelecek -->
 
 						<!-- actor post here -->
 						<!-- POST -->
@@ -358,26 +369,355 @@
 						</li>
 
 
+						<% j++; %>
+						<% continue; %>
+						<% } %>
+						<% } %>
+
+						<% if( i >= allSharedMovies.length){  %>
+
+
+						<!-- actor buraya gelecek -->
+						<!-- actor post here -->
+						<!-- POST -->
+						<li class="comment" style="margin-bottom: 20px;">
+							<div class="comment_content">
+								<div
+									class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+									<div class="comment_image">
+										<div><img src="<%= allSharedActors[j].user.avatarUrl %>" alt=""></div>
+									</div>
+									<div class="comment_info">
+										<div class="comment_name"><%= allSharedActors[j].user.username %>
+										</div>
+										<div class="comment_time"><%= allSharedActors[j].sharedAt %></div>
+									</div>
+								</div>
+
+
+							</div>
+							<div class="comment_content_image">
+								<img src="<%= allSharedActors[j].url %>" alt="" style="width: 100%;">
+							</div>
+
+							<div class="comment_content_top">
+								<div class="comment_text">
+									<p><strong><%= allSharedActors[j].user.username %></strong> shared a new
+										<strong>actor</strong>
+										called <em>
+											<a href="/actors/<%= allSharedActors[j].id %>">"<%= allSharedActors[j].fullname %>"
+											</a>
+										</em>.
+
+									</p>
+								</div>
+							</div>
+
+
+							<!-- LIKE BUTTON + COMMENT BUTTON -->
+							<div class="comment_content_top" style="display:inline-flex;">
+								<% if(!actorsLikedByUser.includes(allSharedActors[j].id)){ %>
+								<form method="POST" action="/actors/like">
+									<input type="hidden" name="id" value="<%= allSharedActors[j].id %>">
+									<input type="hidden" name="requestAddress" value="/newsfeed">
+									<button class="btn btn-outline-secondary" onmouseover="mouseOver(this)"
+										onmouseout="mouseOut(this)" type="submit" style=""><i class="fa fa-heart"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedActors[j].likeCount %></span>
+								</form>
+								<% } else { %>
+								<form method="POST" action="/actors/unlike">
+									<input type="hidden" name="id" value="<%= allSharedActors[j].id %>">
+									<input type="hidden" name="requestAddress" value="/newsfeed">
+									<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedActors[j].likeCount %></span>
+								</form>
+								<% } %>
+
+								<div style="margin-left: 20px;">
+									<button class="btn btn-outline-secondary"
+										onclick="toggleHide('actor_comment_section_<%= j %>')">
+										<i class="fa fa-comment"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedActors[j].reviewCount %></span>
+								</div>
+							</div>
+
+
+							<!-- COMMENT AREA -->
+							<div class="comment_content_bottom" id="actor_comment_section_<%= j %>"
+								style="display:none;">
+
+								<!-- COMMENTS -->
+								<div class="row comments">
+									<div class="col-lg-12">
 
 
 
 
+										<div class="comments_container">
+
+											<ul class="comments_list">
+
+												<% for(let k =0; k<allActorReviews.length; k++){ %>
+												<% if(allSharedActors[j].id == allActorReviews[k].actor.id) {%>
+												<li class="comment">
+													<div class="comment_content">
+														<div
+															class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+															<div class="comment_image">
+																<div><img src="<%= allActorReviews[k].user.avatarUrl %>"
+																		alt="">
+																</div>
+															</div>
+															<div class="comment_info">
+																<div class="comment_name">
+																	<%= allActorReviews[k].user.username %>
+																</div>
+																<div class="comment_time">
+																	<%= allActorReviews[k].createdAt %>
+																</div>
+															</div>
+														</div>
+														<div class="comment_text">
+															<p><%= allActorReviews[k].text %> </p>
+														</div>
+													</div>
+												</li>
+												<% } %>
+												<% } %>
+
+												<li class="comment">
+													<div class="comment_content">
+														<form method="POST" action="/actors/addReview"
+															id="register_form" class="register_form">
+															<div class="row register_row">
+																<input type="hidden" name="id"
+																	value="<%= allSharedActors[j].id %>">
+																<input type="hidden" name="requestAddress"
+																	value="/newsfeed">
+
+																<div class="blog_post_author d-flex flex-row align-items-center justify-content-start col-lg-12 register_col"
+																	style="margin-bottom: 20px;">
+																	<div class="author_image">
+																		<div><img src="<%= user.avatarUrl %>" alt=""
+																				style="width:34px;">
+																		</div>
+																	</div>
+																	<div class="author_info">
+																		<ul>
+																			<li><%= user.username %></li>
+																		</ul>
+																	</div>
+																</div>
+
+																<div class="col-lg-12 register_col">
+																	<textarea class="form_input form_text"
+																		placeholder="Your comment" name="text"
+																		required="required"></textarea>
+																</div>
+																<div class="col">
+																	<button type="submit"
+																		class="form_button trans_200">post a
+																		comment</button>
+																</div>
+															</div>
+														</form>
+														<!-- COMMENT FORM : END -->
+
+													</div>
+												</li>
+											</ul>
+										</div>
+
+
+										<!-- COMMENTS : END-->
+									</div>
+								</div>
+							</div>
+						</li>
 
 
 						<% j++; %>
+
+						<% } else { %>
+
+
+
+						<!-- movie buraya gelecek -->
+
+						<!-- movie post here -->
+						<!-- POST -->
+						<li class="comment" style="margin-bottom: 20px;">
+							<div class="comment_content">
+								<div
+									class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+									<div class="comment_image">
+										<div><img src="<%= allSharedMovies[i].user.avatarUrl %>" alt=""></div>
+									</div>
+									<div class="comment_info">
+										<div class="comment_name"><%= allSharedMovies[i].user.username %>
+										</div>
+										<div class="comment_time"><%= allSharedMovies[i].sharedAt %></div>
+									</div>
+								</div>
+
+
+							</div>
+							<div class="comment_content_image">
+								<img src="<%= allSharedMovies[i].url %>" alt="" style="width: 100%;">
+							</div>
+
+							<div class="comment_content_top">
+								<div class="comment_text">
+									<p><strong><%= allSharedMovies[i].user.username %></strong> shared a new
+										<strong>movie</strong>
+										called <em><a
+												href="/movies/<%= allSharedMovies[i].id %>">"<%= allSharedMovies[i].title %>"</em></a>.
+
+									</p>
+								</div>
+							</div>
+
+
+							<!-- LIKE BUTTON + COMMENT BUTTON -->
+							<div class="comment_content_top" style="display:inline-flex;">
+								<% if(!moviesLikedByUser.includes(allSharedMovies[i].id)){ %>
+								<form method="POST" action="/movies/like">
+									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
+									<input type="hidden" name="requestAddress" value="/newsfeed">
+									<button class="btn btn-outline-secondary" onmouseover="mouseOver(this)"
+										onmouseout="mouseOut(this)" type="submit"><i class="fa fa-heart"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedMovies[i].likeCount %></span>
+								</form>
+								<% } else { %>
+								<form method="POST" action="/movies/unlike">
+									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
+									<input type="hidden" name="requestAddress" value="/newsfeed">
+									<button class="btn btn-danger" type="submit"><i class="fa fa-heart"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedMovies[i].likeCount %></span>
+								</form>
+								<% } %>
+
+								<div style="margin-left: 20px;">
+									<button class="btn btn-outline-secondary"
+										onclick="toggleHide('movie_comment_section_<%= i %>')">
+										<i class="fa fa-comment"></i>
+									</button><span
+										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedMovies[i].reviewCount %></span>
+								</div>
+							</div>
+
+
+							<!-- COMMENT AREA -->
+							<div class="comment_content_bottom" id="movie_comment_section_<%= i %>"
+								style="display:none;">
+
+								<!-- COMMENTS -->
+								<div class="row comments">
+									<div class="col-lg-12">
+
+
+
+
+										<div class="comments_container">
+
+											<ul class="comments_list">
+												<% for(let k =0; k<allMovieReviews.length; k++){ %>
+												<% if(allSharedMovies[i].id == allMovieReviews[k].movie.id) { %>
+												<li class="comment">
+													<div class="comment_content">
+														<div
+															class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+															<div class="comment_image">
+																<div><img src="<%= allMovieReviews[k].user.avatarUrl %>"
+																		alt="">
+																</div>
+															</div>
+															<div class="comment_info">
+																<div class="comment_name">
+																	<%= allMovieReviews[k].user.username %>
+																</div>
+																<div class="comment_time">
+																	<%= allMovieReviews[k].createdAt %>
+																</div>
+															</div>
+														</div>
+														<div class="comment_text">
+															<p><%= allMovieReviews[k].text %> </p>
+														</div>
+													</div>
+												</li>
+												<% } %>
+												<% } %>
+
+												<li class="comment">
+													<div class="comment_content">
+														<form method="POST" action="/movies/addReview"
+															id="register_form" class="register_form">
+															<div class="row register_row">
+																<input type="hidden" name="id"
+																	value="<%= allSharedMovies[i].id %>">
+																<input type="hidden" name="requestAddress"
+																	value="/newsfeed">
+
+																<div class="blog_post_author d-flex flex-row align-items-center justify-content-start col-lg-12 register_col"
+																	style="margin-bottom: 20px;">
+																	<div class="author_image">
+																		<div><img src="<%= user.avatarUrl %>" alt=""
+																				style="width:34px;">
+																		</div>
+																	</div>
+																	<div class="author_info">
+																		<ul>
+																			<li><%= user.username %></li>
+																		</ul>
+																	</div>
+																</div>
+
+																<div class="col-lg-12 register_col">
+																	<textarea class="form_input form_text"
+																		placeholder="Your comment" name="text"
+																		required="required"></textarea>
+																</div>
+																<div class="col">
+																	<button type="submit"
+																		class="form_button trans_200">post a
+																		comment</button>
+																</div>
+															</div>
+														</form>
+														<!-- COMMENT FORM : END -->
+
+													</div>
+												</li>
+											</ul>
+										</div>
+
+
+										<!-- COMMENTS : END-->
+									</div>
+								</div>
+							</div>
+						</li>
+
+
+						<!-- POST : END -->
+						<!-- movie post end -->
+
+						<% i++; %>
 						<% } %>
 						<% } %>
+						<!-- WHILE END -->
+
 
 						<% }else{ %>
 						<div style="text-align : center; margin-bottom:30px;">There is nothing to show here.</div>
 						<% } %>
-						<!-- POST : END -->
-						<!-- actor post end -->
-
-
-
-
-
+						<!-- ALL POSTS : END -->
 
 					</ul>
 				</div>

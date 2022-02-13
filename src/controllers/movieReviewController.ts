@@ -36,7 +36,7 @@ export const addMovieReview: RequestHandler = async (req, res) => {
       movie.reviewCount++;
       await getRepository(Movie).save(movie);
 
-      console.log('you added a review to this movie');
+      global.successMessage = 'Movie comment has been added successfully';
       return res.status(200).redirect(requestAddress);
     } else {
       return res
