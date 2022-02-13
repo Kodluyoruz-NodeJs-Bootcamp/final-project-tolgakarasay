@@ -4,7 +4,7 @@ import * as actorLikeController from '../controllers/actorLikeController';
 import * as actorReviewController from '../controllers/actorReviewController';
 const auth = require('../middlewares/authMiddleware').default;
 
-// actor routes
+// ACTOR ROUTES
 router.route('/addActor').post(auth, actorController.addActor);
 router.route('/').get(auth, actorController.listAllSharedActors);
 router.route('/:id').delete(auth, actorController.deleteActor);

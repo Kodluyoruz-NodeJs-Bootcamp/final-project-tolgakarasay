@@ -4,7 +4,7 @@ import * as movieLikeController from '../controllers/movieLikeController';
 import * as movieReviewController from '../controllers/movieReviewController';
 const auth = require('../middlewares/authMiddleware').default;
 
-// movie routes
+// MOVIE ROUTES
 router.route('/addMovie').post(auth, movieController.addMovie);
 router.route('/').get(auth, movieController.listAllSharedMovies);
 router.route('/:id').delete(auth, movieController.deleteMovie);

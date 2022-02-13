@@ -4,10 +4,9 @@ import signJwt from '../middlewares/signJwtMiddleware';
 import socialLoginOrRegister from '../middlewares/socialSignInMiddleware';
 const auth = require('../middlewares/authMiddleware').default;
 
-// user routes
+// USER ROUTES
 router.route('/signup').post(userController.registerUser);
 router.route('/login').post(userController.makeUserLogin, signJwt);
-//router.route('/list').get(auth, userController.listUsers);
 router.route('/logout').get(userController.makeUserLogout);
 router.route('/dashboard').get(auth, userController.getDashboardPage);
 router
