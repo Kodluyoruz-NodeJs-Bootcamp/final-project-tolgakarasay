@@ -7,10 +7,22 @@ import Movie from './Movie';
 import MovieLike from './MovieLike';
 import MovieReview from './MovieReview';
 
+export enum AuthMethod {
+  LOCAL = 'local',
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    type: 'enum',
+    enum: AuthMethod,
+  })
+  authMethod: AuthMethod;
 
   @Column({ unique: true })
   @IsEmail()
@@ -22,9 +34,8 @@ export class User {
   @IsNotEmpty()
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Length(4, 20)
-  @IsNotEmpty()
   password: string;
 
   @Column({ default: '/images/profile/13.png' })

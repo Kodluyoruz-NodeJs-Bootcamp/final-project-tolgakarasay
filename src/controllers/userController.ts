@@ -2,11 +2,17 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
 import 'reflect-metadata';
-import { User } from '../entity/User';
-import { getRepository } from 'typeorm';
+import { AuthMethod, User } from '../entity/User';
+import { Any, getRepository } from 'typeorm';
 import { Movie } from '../entity/Movie';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import Actor from '../entity/Actor';
+import { OAuth2Client } from 'google-auth-library';
+import { nextTick } from 'process';
+import axios from 'axios';
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const client = new OAuth2Client(CLIENT_ID);
 
 // Add extra variables to SessionData
 declare module 'express-session' {
@@ -16,7 +22,10 @@ declare module 'express-session' {
   }
 }
 
-// This function is invoked to register a new user
+//________________________________________________________
+//                                                        |
+//              REGISTER A NEW USER (LOCAL)               |
+//________________________________________________________|
 export const registerUser: RequestHandler = async (req, res) => {
   try {
     // Get user credentials
@@ -29,10 +38,12 @@ export const registerUser: RequestHandler = async (req, res) => {
     }
 
     // Check if user already exists in the database
-    const existingEmail = await getRepository(User).findOne({ email });
-    const existingUsername = await getRepository(User).findOne({ username });
+    const userWithSameEmail = await getRepository(User).findOne({ email });
+    const userWithSameUsername = await getRepository(User).findOne({
+      username,
+    });
 
-    if (existingEmail || existingUsername) {
+    if (userWithSameEmail || userWithSameUsername) {
       global.errorMessage = 'User already exists!';
       return res.status(409).redirect('/signup');
     }
@@ -49,6 +60,7 @@ export const registerUser: RequestHandler = async (req, res) => {
       username,
       password: encryptedPassword,
       avatarUrl,
+      authMethod: AuthMethod.LOCAL,
     });
 
     // Save new user to database
@@ -64,8 +76,11 @@ export const registerUser: RequestHandler = async (req, res) => {
   }
 };
 
-// This function is invoked when user tries to login
-export const makeUserLogin: RequestHandler = async (req, res) => {
+//________________________________________________________
+//                                                        |
+//                MAKE USER LOGIN (LOCAL)                 |
+//________________________________________________________|
+export const makeUserLogin: RequestHandler = async (req, res, next) => {
   try {
     // Get user input at login page
     const { username, password } = req.body;
@@ -78,21 +93,8 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
     // If user exists and password matches, create token
     const user = await getRepository(User).findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign(
-        { id: user.id, browser: req.headers['user-agent'] },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: '10m',
-        }
-      );
-
-      // set cookie
-      res.cookie('access_token', token, {
-        httpOnly: true,
-      });
-
-      // Route authenticated user to welcome page
-      return res.status(200).redirect('dashboard');
+      global.userIN = user.id;
+      return next();
     }
     global.errorMessage = 'Invalid credentials!';
   } catch (err) {
@@ -101,7 +103,10 @@ export const makeUserLogin: RequestHandler = async (req, res) => {
   return res.status(400).redirect('/login');
 };
 
-// this function is invoked when user clicks on logout button.
+//________________________________________________________
+//                                                        |
+//                   MAKE USER LOGOUT                     |
+//________________________________________________________|
 export const makeUserLogout: RequestHandler = (req, res) => {
   req.session.destroy(function (err) {
     if (err) {
@@ -115,6 +120,10 @@ export const makeUserLogout: RequestHandler = (req, res) => {
   });
 };
 
+//________________________________________________________
+//                                                        |
+//                  GET DASHBOARD PAGE                    |
+//________________________________________________________|
 export const getDashboardPage: RequestHandler = async (req, res) => {
   const user = await getRepository(User).findOne(global.userIN);
 
@@ -137,4 +146,88 @@ export const getDashboardPage: RequestHandler = async (req, res) => {
   });
 
   res.on('finish', resetGlobals);
+};
+
+//________________________________________________________
+//                                                        |
+//                     GOOGLE SIGN IN                     |
+//________________________________________________________|
+export const googleSignIn: RequestHandler = async (req, res, next) => {
+  try {
+    const idToken = req.body.idtoken;
+
+    // Verify Google's idToken
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const email = payload['email'];
+
+    res.locals.email = email;
+    res.locals.authMethod = AuthMethod.GOOGLE;
+    return next();
+
+    // return next();
+  } catch (error) {
+    global.errorMessage = error;
+    return res.status(400).redirect('/login');
+  }
+};
+
+//________________________________________________________
+//                                                        |
+//                   FACEBOOK SIGN IN                     |
+//________________________________________________________|
+export const facebookSignIn: RequestHandler = async (req, res, next) => {
+  const code = req.query.code;
+
+  async function getAccessTokenFromCode(code) {
+    const { data } = await axios({
+      url: 'https://graph.facebook.com/v13.0/oauth/access_token',
+      method: 'get',
+      params: {
+        client_id: process.env.CLIENT_ID_FB,
+        client_secret: process.env.CLIENT_SECRET_FB,
+        redirect_uri: 'http://localhost:3000/users/facebookauth',
+        code,
+      },
+    });
+    console.log(
+      '=============================================================='
+    );
+    console.log(data.access_token); // { access_token, token_type, expires_in }
+    return data.access_token;
+  }
+
+  async function getEmailFromAccessToken(access_token) {
+    const { data } = await axios({
+      url: 'https://graph.facebook.com/me',
+      method: 'get',
+      params: {
+        access_token: access_token,
+        fields: 'email',
+      },
+    });
+    console.log(
+      '=============================================================='
+    );
+    console.log(data.email); // { access_token, token_type, expires_in }
+    return data.email;
+  }
+
+  try {
+    const accessToken = await getAccessTokenFromCode(code);
+    console.log(accessToken);
+    const email = await getEmailFromAccessToken(accessToken);
+    console.log(email);
+    res.locals.email = email;
+    res.locals.authMethod = AuthMethod.FACEBOOK;
+    return next();
+  } catch (error) {
+    global.errorMessage = error;
+    return res.status(400).redirect('/login');
+  }
 };

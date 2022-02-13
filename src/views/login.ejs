@@ -2,6 +2,41 @@
 
 <link rel="stylesheet" type="text/css" href="/styles/main_styles.css">
 <link rel="stylesheet" type="text/css" href="/styles/responsive.css">
+
+<meta name="google-signin-client_id" content="352232223556-7sut6c6gerjfu6qc4u0uvhmniqk8e5r3.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script>
+	var googleUser = {};
+	var startApp = function () {
+		gapi.load('auth2', function () {
+			// Retrieve the singleton for the GoogleAuth library and set up the client.
+			auth2 = gapi.auth2.init({
+				client_id: '352232223556-7sut6c6gerjfu6qc4u0uvhmniqk8e5r3.apps.googleusercontent.com',
+				cookiepolicy: 'single_host_origin',
+				// Request scopes in addition to 'profile' and 'email'
+				//scope: 'additional_scope'
+			});
+			attachSignin(document.getElementById('customBtn'));
+		});
+	};
+
+	function attachSignin(element) {
+		console.log(element.id);
+		auth2.attachClickHandler(element, {},
+			function (googleUser) {
+				var id_token = googleUser.getAuthResponse().id_token;
+				signOut();
+				var inputF = document.getElementById("token-input").value = id_token;
+				document.getElementById("google-form").submit();
+			}, function (error) {
+				alert(JSON.stringify(error, undefined, 2));
+			});
+	}
+</script>
+
+
 </head>
 
 <body>
@@ -27,6 +62,7 @@
 							<%= successMessage %>
 						</div>
 						<% } %>
+
 						<div class="form_title">Login</div>
 						<form method="POST" action="/users/login" id="contact_form" class="contact_form">
 							<div class="row contact_row">
@@ -52,31 +88,66 @@
 									<div class="or_text">or</div>
 								</div>
 
+								<!-- GOOGLE LOGIN BUTTON -->
 								<div class="col-lg-12 ">
-									<a class="btn btn-outline-dark social_button" href="/users/googleauth" role="button"
-										style="text-transform:none">
-										<img width="20px" alt="Google sign-in"
-											src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-										Login with Google
-									</a>
+									<div id="gSignInWrapper">
+										<div class="btn btn-outline-dark social_button" id="customBtn"
+											class="customGPlusSignIn" data-onsuccess="onSignIn">
+											<img width="20px" alt="Google sign-in"
+												src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+											Sign up with Google
+										</div>
+									</div>
+									<div id="name"></div>
+									<script>startApp();</script>
 								</div>
 
+
+								<!-- FACEBOOK LOGIN BUTTON -->
 								<div class="col-lg-12 ">
-									<a class="btn btn-outline-dark social_button" href="/users/facebookauth"
+									<a class="btn btn-outline-dark social_button" id="fb"
+										href="https://www.facebook.com/v13.0/dialog/oauth?client_id=811026803190747&redirect_uri=http://localhost:3000/users/facebookauth&scope=email"
 										role="button" style="text-transform:none">
 										<img width="20px" alt="Facebook sign-in"
 											src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" />
-										Login with Facebook
+										Sign up with Facebook
 									</a>
+
 								</div>
 
 							</div>
 						</form>
+
+						<!-- HIDDEN FORM TO SEND GOOGLE TOKEN TO BACKEND -->
+						<div style="display: none;">
+							<form id="google-form" action="/users/googleauth" method="POST">
+								<input id="token-input" type="text" name="idtoken" value="" />
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+	<script>
+		//GOOGLE
+		function onSignIn(googleUser) {
+			var id_token = googleUser.getAuthResponse().id_token;
+			signOut();
+			var inputF = document.getElementById("token-input").value = id_token;
+			document.getElementById("google-form").submit();
+		}
+
+		function signOut() {
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+				console.log('User signed out.');
+			});
+		}
+	</script>
 
 
 	<%- include('partials/_footer'); %>

@@ -46,6 +46,7 @@ global.successMessage = null;
     })
   );
   app.use(fileUpload());
+  app.use(express.json());
 
   // SESSION
   app.use(
