@@ -76,27 +76,21 @@
             <div></div>
         </div>
     </div>
-    <div class="search">
-        <form action="#" class="header_search_form menu_mm">
-            <input type="search" class="search_input menu_mm" placeholder="Search" required="required">
-            <button class="header_search_button d-flex flex-column align-items-center justify-content-center menu_mm">
-                <i class="fa fa-search menu_mm" aria-hidden="true"></i>
-            </button>
-        </form>
-    </div>
+
     <nav class="menu_nav">
         <ul class="menu_mm">
             <% if(userIN) { %>
-            <li class="menu_mm"><a href="index.html">Home</a></li>
-            <li class="menu_mm"><a href="courses.html">Courses</a></li>
-            <li class="menu_mm"><a href="instructors.html">Instructors</a></li>
-            <li class="menu_mm"><a href="#">Events</a></li>
-            <li class="menu_mm"><a href="blog.html">Blog</a></li>
-            <li class="menu_mm"><a href="contact.html">Contact</a></li>
+            <li class="<%= page_name ==='newsfeed' && 'active' %>"><a href="/newsfeed">Newsfeed</a>
+            </li>
+            <li class="<%= page_name ==='actors' && 'active' %>"><a href="/actors">Actors</a></li>
+            <li class="<%= page_name ==='movies' && 'active' %>"><a href="/movies">Movies</a>
+            </li>
+            <li class="<%= page_name ==='dashboard' && 'active' %>"><a href="/users/dashboard">Dashboard</a></li>
+            </li>
             <% } %>
             <% if(!userIN) { %>
-            <li class="menu_mm"><a href="/login">Login</a></li>
-            <li class="menu_mm"><a href="/signup">Signup</a></li>
+            <li class="menu_mm <%= page_name ==='login' && 'active' %>"><a href="/login">Login</a></li>
+            <li class="menu_mm <%= page_name ==='signup' && 'active' %>"><a href="/signup">Signup</a></li>
             <% } %>
         </ul>
     </nav>
