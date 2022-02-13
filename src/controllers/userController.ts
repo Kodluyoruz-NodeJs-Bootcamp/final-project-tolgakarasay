@@ -108,16 +108,9 @@ export const makeUserLogin: RequestHandler = async (req, res, next) => {
 //                   MAKE USER LOGOUT                     |
 //________________________________________________________|
 export const makeUserLogout: RequestHandler = (req, res) => {
-  req.session.destroy(function (err) {
-    if (err) {
-      return res.status(400).send(err);
-    } else {
-      res.clearCookie('access_token');
-      res.clearCookie('connect.sid');
-      global.userIN = null;
-      return res.redirect('/login');
-    }
-  });
+  res.clearCookie('access_token');
+  global.userIN = null;
+  return res.redirect('/login');
 };
 
 //________________________________________________________
@@ -138,6 +131,7 @@ export const getDashboardPage: RequestHandler = async (req, res) => {
   });
 
   res.status(200).render('dashboard', {
+    user,
     page_name: 'dashboard',
     errorMessage: global.errorMessage,
     succesMessage: global.successMessage,
