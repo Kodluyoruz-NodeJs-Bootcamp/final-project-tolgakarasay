@@ -20,7 +20,7 @@ const socialLoginOrRegister: RequestHandler = async (req, res, next) => {
       global.errorMessage =
         'This email address is associated with another authentication method!';
 
-      return res.status(400).redirect('/login');
+      return res.status(409).redirect('/login');
     }
 
     // Assign a random profile photo

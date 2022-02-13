@@ -70,7 +70,7 @@ export const registerUser: RequestHandler = async (req, res) => {
     return res.status(201).redirect('/login');
   } catch (err) {
     global.errorMessage = err;
-    return res.status(201).redirect('/signup');
+    return res.status(400).redirect('/signup');
   }
 };
 
@@ -108,7 +108,7 @@ export const makeUserLogin: RequestHandler = async (req, res, next) => {
 export const makeUserLogout: RequestHandler = (req, res) => {
   res.clearCookie('access_token');
   global.userIN = null;
-  return res.redirect('/login');
+  return res.status(200).redirect('/login');
 };
 
 //________________________________________________________

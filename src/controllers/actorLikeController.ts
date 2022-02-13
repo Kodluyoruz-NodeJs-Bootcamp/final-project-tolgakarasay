@@ -33,7 +33,7 @@ export const likeActor: RequestHandler = async (req, res) => {
       return res.status(200).redirect(req.body.requestAddress);
     } else {
       return res
-        .status(400)
+        .status(401)
         .send('Only the actor owner can like a private actor.');
     }
   } catch (error) {

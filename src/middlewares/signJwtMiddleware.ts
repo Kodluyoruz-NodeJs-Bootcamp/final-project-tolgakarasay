@@ -16,9 +16,10 @@ const signJwt: RequestHandler = (req, res) => {
       httpOnly: true,
     });
 
-    return res.redirect('/users/dashboard');
+    return res.status(200).redirect('/users/dashboard');
   } catch (err) {
-    console.log(err);
+    global.errorMessage = err;
+    res.status(400).redirect('/login');
   }
 };
 

@@ -66,7 +66,7 @@ export const listAllSharedMoviesAndActors: RequestHandler = async (
     const allMovieReviews = await getRepository(MovieReview).find();
     const allActorReviews = await getRepository(ActorReview).find();
 
-    res.render('newsfeed', {
+    res.status(200).render('newsfeed', {
       allSharedMovies,
       allSharedActors,
       moviesLikedByUser,

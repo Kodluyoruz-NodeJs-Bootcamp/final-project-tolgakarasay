@@ -150,7 +150,7 @@ export const updateMovie: RequestHandler = async (req, res) => {
       return res.status(201).redirect('/users/dashboard');
     } else {
       global.errorMessage = 'Only movie owner can update the movie!';
-      return res.status(400).redirect('/users/dashboard');
+      return res.status(403).redirect('/users/dashboard');
     }
   } catch (err) {
     console.log(err);

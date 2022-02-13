@@ -34,10 +34,10 @@ export const addActorReview: RequestHandler = async (req, res) => {
       await getRepository(Actor).save(actor);
 
       global.successMessage = 'Actor comment has been added successfully';
-      return res.status(200).redirect(requestAddress);
+      return res.status(201).redirect(requestAddress);
     } else {
       return res
-        .status(400)
+        .status(401)
         .send('Only actor owner can add reviews to private actor.');
     }
   } catch (error) {

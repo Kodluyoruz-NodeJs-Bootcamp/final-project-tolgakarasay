@@ -33,7 +33,7 @@ export const likeMovie: RequestHandler = async (req, res) => {
       return res.status(200).redirect(req.body.requestAddress);
     } else {
       return res
-        .status(400)
+        .status(403)
         .send('Only the movie owner can like a private movie.');
     }
   } catch (error) {

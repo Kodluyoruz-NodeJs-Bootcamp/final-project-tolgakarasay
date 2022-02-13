@@ -146,10 +146,10 @@ export const updateActor: RequestHandler = async (req, res) => {
 
       // Redirect user to dashboard page
       global.successMessage = 'Actor has been updated successfully';
-      return res.status(201).redirect('/users/dashboard');
+      return res.status(200).redirect('/users/dashboard');
     } else {
       global.errorMessage = 'Only actor owner can update the actor!';
-      return res.status(400).redirect('/users/dashboard');
+      return res.status(401).redirect('/users/dashboard');
     }
   } catch (err) {
     console.log(err);
@@ -190,7 +190,7 @@ export const listAllSharedActors: RequestHandler = async (req, res) => {
       take: actorsPerPage,
     });
 
-    return res.render('actors', {
+    return res.status(200).render('actors', {
       allSharedActors,
       actorsLikedByUser,
       page_name: 'actors',
@@ -230,7 +230,7 @@ export const deleteActor: RequestHandler = async (req, res) => {
       return res.status(200).redirect('/users/dashboard');
     } else {
       global.errorMessage = 'Only the actor owner can delete the actor.';
-      return res.status(400).redirect('/users/dashboard');
+      return res.status(401).redirect('/users/dashboard');
     }
   } catch (error) {
     global.errorMessage = error;
@@ -293,9 +293,9 @@ export const getActor: RequestHandler = async (req, res) => {
     console.log(actor.user.id);
     if (actor.isShared == false && actor.user.id != global.userIN) {
       return res
-        .status(403)
+        .status(401)
         .send(
-          "Access Denied. A private actor's page can only be seen by its creator."
+          "Unauthorized Access. A private actor's page can only be seen by its creator."
         );
     }
 
