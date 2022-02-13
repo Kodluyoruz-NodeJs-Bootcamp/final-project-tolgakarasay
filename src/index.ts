@@ -1,14 +1,10 @@
 // MODULES
 import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
-import * as ejs from 'ejs';
 import * as methodOverride from 'method-override';
-import { createConnection, getConnection } from 'typeorm';
-import { TypeormStore } from 'typeorm-store';
+import { createConnection } from 'typeorm';
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
-import { Session } from './entity/Session';
 import userRoute from './routes/userRoute';
 import pageRoute from './routes/pageRoute';
 import movieRoute from './routes/movieRoute';
@@ -47,23 +43,6 @@ global.successMessage = null;
   );
   app.use(fileUpload());
   app.use(express.json());
-
-  // SESSION
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      store: new TypeormStore({
-        repository: getConnection().getRepository(Session),
-      }),
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 2, // 2 hours
-        sameSite: true,
-        httpOnly: true,
-      },
-    })
-  );
 
   // TEMPLATE ENGINE
   app.set('views', './src/views');
