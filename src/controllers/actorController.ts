@@ -7,7 +7,6 @@ import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import ActorLike from '../entity/ActorLike';
 import ActorReview from '../entity/ActorReview';
 import * as fs from 'fs';
-
 import * as express from 'express';
 import { nanoid } from 'nanoid';
 const app = express();

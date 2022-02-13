@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
 import 'reflect-metadata';
 import { AuthMethod, User } from '../entity/User';
@@ -8,7 +7,6 @@ import { Movie } from '../entity/Movie';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import Actor from '../entity/Actor';
 import { OAuth2Client } from 'google-auth-library';
-import { nextTick } from 'process';
 import axios from 'axios';
 
 const CLIENT_ID = process.env.CLIENT_ID;

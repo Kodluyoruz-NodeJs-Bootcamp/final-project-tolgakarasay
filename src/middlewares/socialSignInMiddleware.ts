@@ -1,7 +1,7 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
 import { customAlphabet } from 'nanoid';
 import { getRepository } from 'typeorm';
-import User, { AuthMethod } from '../entity/User';
+import User from '../entity/User';
 
 const socialLoginOrRegister: RequestHandler = async (req, res, next) => {
   try {

@@ -7,7 +7,6 @@ import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import MovieLike from '../entity/MovieLike';
 import MovieReview from '../entity/MovieReview';
 import * as fs from 'fs';
-
 import * as express from 'express';
 import { nanoid } from 'nanoid';
 

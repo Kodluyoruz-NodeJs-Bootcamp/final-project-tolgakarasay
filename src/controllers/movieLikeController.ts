@@ -3,7 +3,6 @@ import 'reflect-metadata';
 import { User } from '../entity/User';
 import { getRepository } from 'typeorm';
 import Movie from '../entity/Movie';
-import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 import MovieLike from '../entity/MovieLike';
 
 //________________________________________________________

@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 const signJwt: RequestHandler = (req, res) => {

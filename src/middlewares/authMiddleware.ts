@@ -1,4 +1,4 @@
-import { json, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 // VERIFY JWT
