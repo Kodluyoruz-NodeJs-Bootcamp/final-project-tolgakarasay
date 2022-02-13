@@ -65,7 +65,8 @@
 								<form method="POST" action="/movies/like">
 									<input type="hidden" name="id" value="<%= allSharedMovies[i].id %>">
 									<input type="hidden" name="requestAddress" value="/newsfeed">
-									<button class="btn btn-outline-secondary" type="submit"><i class="fa fa-heart"></i>
+									<button class="btn btn-outline-secondary" onmouseover="mouseOver(this)"
+										onmouseout="mouseOut(this)" type="submit"><i class="fa fa-heart"></i>
 									</button><span
 										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedMovies[i].likeCount %></span>
 								</form>
@@ -238,8 +239,8 @@
 								<form method="POST" action="/actors/like">
 									<input type="hidden" name="id" value="<%= allSharedActors[j].id %>">
 									<input type="hidden" name="requestAddress" value="/newsfeed">
-									<button class="btn btn-outline-secondary" type="submit" style=""><i
-											class="fa fa-heart"></i>
+									<button class="btn btn-outline-secondary" onmouseover="mouseOver(this)"
+										onmouseout="mouseOut(this)" type="submit" style=""><i class="fa fa-heart"></i>
 									</button><span
 										style="color: rgb(119, 119, 119);">&nbsp&nbsp<%= allSharedActors[j].likeCount %></span>
 								</form>
@@ -386,6 +387,18 @@
 	</div>
 
 	<%- include('partials/_footer'); %>
+
+	<script>
+		const mouseOver = (element) => {
+			element.classList.add("btn-danger");
+			element.classList.remove("btn-outline-secondary");
+		}
+
+		const mouseOut = (element) => {
+			element.classList.add("btn-outline-secondary");
+			element.classList.remove("btn-danger");
+		}
+	</script>
 
 	<script>
 		const toggleHide = (section_id) => {

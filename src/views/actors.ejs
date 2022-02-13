@@ -82,8 +82,8 @@
 											<input type="hidden" name="id" value="<%= allSharedActors[i].id %>">
 											<input type="hidden" name="requestAddress"
 												value="/actors/?page=<%= currentPage %>">
-											<button class="btn btn-outline-danger" type="submit"><i
-													class="fa fa-heart"></i>
+											<button class="btn btn-outline-secondary" onmouseover="mouseOver(this)"
+												onmouseout="mouseOut(this)" type="submit"><i class="fa fa-heart"></i>
 												&nbsp&nbsp<%= allSharedActors[i].likeCount %>&nbsp
 												like</button>
 										</form>
@@ -138,6 +138,17 @@
 		</div>
 
 
+		<script>
+			const mouseOver = (element) => {
+				element.classList.add("btn-danger");
+				element.classList.remove("btn-outline-secondary");
+			}
+
+			const mouseOut = (element) => {
+				element.classList.add("btn-outline-secondary");
+				element.classList.remove("btn-danger");
+			}
+		</script>
 
 
 		<%- include('partials/_footer'); %>
