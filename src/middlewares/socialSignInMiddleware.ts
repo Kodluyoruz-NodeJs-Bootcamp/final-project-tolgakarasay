@@ -3,10 +3,15 @@ import { customAlphabet } from 'nanoid';
 import { getRepository } from 'typeorm';
 import User from '../entity/User';
 
+//________________________________________________________
+//                                                        |
+//               SOCIAL LOGIN OR REGISTER                 |
+//________________________________________________________|
 const socialLoginOrRegister: RequestHandler = async (req, res, next) => {
   try {
     const email = res.locals.email;
     const authMethod = res.locals.authMethod;
+
     // Check if user already exists in the database
     const userWithSameEmail = await getRepository(User).findOne({ email });
 
@@ -27,7 +32,9 @@ const socialLoginOrRegister: RequestHandler = async (req, res, next) => {
     const number = 10 + Math.floor(23 * Math.random());
     const avatarUrl = `/images/profile/${number}.png`;
 
-    // Assign a username
+    // Assign a username : get first part of email
+    // and add a 2 digit random number
+    // to prevent any possible conflict
     const nanoid = customAlphabet('1234567890', 2);
     const username = email.split('@')[0] + '_' + nanoid();
 

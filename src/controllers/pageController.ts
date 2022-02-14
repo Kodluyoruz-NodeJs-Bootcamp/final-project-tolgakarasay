@@ -1,7 +1,10 @@
 import { RequestHandler } from 'express';
 import resetGlobals from '../middlewares/resetGlobalsMiddleware';
 
-// GET INDEX PAGE
+//________________________________________________________
+//                                                        |
+//                   GET INDEX PAGE                       |
+//________________________________________________________|
 export const getIndexPage: RequestHandler = (req, res) => {
   res.status(200).render('index', {
     page_name: 'index',
@@ -9,7 +12,10 @@ export const getIndexPage: RequestHandler = (req, res) => {
   res.on('finish', resetGlobals);
 };
 
-// GET LOGIN PAGE
+//________________________________________________________
+//                                                        |
+//                   GET LOGIN PAGE                       |
+//________________________________________________________|
 export const getLoginPage: RequestHandler = (req, res) => {
   res.status(200).render('login', {
     page_name: 'login',
@@ -19,7 +25,10 @@ export const getLoginPage: RequestHandler = (req, res) => {
   res.on('finish', resetGlobals);
 };
 
-// GET SIGNUP PAGE
+//________________________________________________________
+//                                                        |
+//                  GET SIGNUP PAGE                       |
+//________________________________________________________|
 export const getSignupPage: RequestHandler = (req, res) => {
   res.status(200).render('signup', {
     page_name: 'signup',

@@ -164,6 +164,7 @@ export const updateActor: RequestHandler = async (req, res) => {
 //________________________________________________________|
 export const listAllSharedActors: RequestHandler = async (req, res) => {
   try {
+    // for pagination get the current page
     const currentPage = Number(req.query.page) || 1;
     const actorsPerPage = 8;
     const totalNumberOfActors = await getRepository(Actor).count({

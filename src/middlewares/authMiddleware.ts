@@ -1,7 +1,10 @@
 import { RequestHandler } from 'express';
 import * as jwt from 'jsonwebtoken';
 
-// VERIFY JWT
+//________________________________________________________
+//                                                        |
+//                VERIFY JSON WEB TOKEN                   |
+//________________________________________________________|
 const verifyToken: RequestHandler = async (req, res, next) => {
   // check if a token exists in the cookie
   const token = req.cookies.access_token;

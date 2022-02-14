@@ -9,16 +9,8 @@ import Actor from '../entity/Actor';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const client = new OAuth2Client(CLIENT_ID);
-
-// Add extra variables to SessionData
-declare module 'express-session' {
-  interface SessionData {
-    browser: String;
-    userID: number;
-  }
-}
+const CLIENT_ID_GOOGLE = process.env.CLIENT_ID_GOOGLE;
+const client = new OAuth2Client(CLIENT_ID_GOOGLE);
 
 //________________________________________________________
 //                                                        |
@@ -151,7 +143,7 @@ export const googleSignIn: RequestHandler = async (req, res, next) => {
     // Verify Google's idToken
     const ticket = await client.verifyIdToken({
       idToken,
-      audience: CLIENT_ID,
+      audience: CLIENT_ID_GOOGLE,
     });
 
     const payload = ticket.getPayload();
