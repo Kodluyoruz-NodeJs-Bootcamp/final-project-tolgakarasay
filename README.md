@@ -1,6 +1,6 @@
 # MovieCamp Movie Review App
 
-### <a href="https://github.com/tolgakarasay">🌍&nbsp; GO TO LIVE DEMO</a>
+### <a href="https://tolga-moviecamp.herokuapp.com">🌍&nbsp; GO TO LIVE DEMO</a>
 
 #
 
