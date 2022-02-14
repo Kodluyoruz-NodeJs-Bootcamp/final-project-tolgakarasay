@@ -53,15 +53,11 @@ export const listAllSharedMoviesAndActors: RequestHandler = async (
       take: itemsPerPage,
     });
 
-    console.log('allsharedmovies: ' + allSharedMovies[0].title);
-
     const allSharedActors = await getRepository(Actor).find({
       where: { isShared: true },
       order: { sharedAt: 'DESC' },
       take: itemsPerPage,
     });
-
-    console.log('allsharedActors: ' + allSharedActors[0].fullname);
 
     const allMovieReviews = await getRepository(MovieReview).find();
     const allActorReviews = await getRepository(ActorReview).find();
@@ -78,7 +74,6 @@ export const listAllSharedMoviesAndActors: RequestHandler = async (
       allMovieReviews,
     });
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     res.status(400).redirect('/users/dashboard');
   }

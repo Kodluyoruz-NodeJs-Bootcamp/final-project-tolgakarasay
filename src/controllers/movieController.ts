@@ -74,7 +74,6 @@ export const addMovie: RequestHandler = async (req, res) => {
     global.successMessage = 'Movie has been added successfully';
     return res.status(201).redirect('/users/dashboard');
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     return res.status(400).redirect('/users/dashboard');
   }
@@ -153,7 +152,6 @@ export const updateMovie: RequestHandler = async (req, res) => {
       return res.status(403).redirect('/users/dashboard');
     }
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     return res.status(400).redirect('/users/dashboard');
   }
@@ -200,7 +198,6 @@ export const listAllSharedMovies: RequestHandler = async (req, res) => {
       currentPage,
     });
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     res.status(400).redirect('/users/dashboard');
   }
@@ -290,8 +287,6 @@ export const getMovie: RequestHandler = async (req, res) => {
       });
     }
 
-    console.log(global.userIN);
-    console.log(movie.user.id);
     if (movie.isShared == false && movie.user.id != global.userIN) {
       return res
         .status(403)
@@ -309,7 +304,6 @@ export const getMovie: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     global.errorMessage = error;
-    console.log(error);
     res.status(400).redirect('/movies');
   }
   res.on('finish', resetGlobals);

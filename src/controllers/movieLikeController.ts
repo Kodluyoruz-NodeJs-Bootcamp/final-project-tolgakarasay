@@ -29,7 +29,6 @@ export const likeMovie: RequestHandler = async (req, res) => {
       movie.likeCount++;
       await getRepository(Movie).save(movie);
 
-      console.log('you liked this movie');
       return res.status(200).redirect(req.body.requestAddress);
     } else {
       return res
@@ -68,8 +67,6 @@ export const unlikeMovie: RequestHandler = async (req, res) => {
     movie.likeCount--;
     await getRepository(Movie).save(movie);
 
-    console.log('you unliked this movie');
-    console.log(req.body.requestAddress);
     return res.status(200).redirect(req.body.requestAddress);
   } catch (error) {
     return res.status(400).json({

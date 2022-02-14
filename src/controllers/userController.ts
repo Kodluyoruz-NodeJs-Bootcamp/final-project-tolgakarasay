@@ -179,10 +179,7 @@ export const facebookSignIn: RequestHandler = async (req, res, next) => {
         code,
       },
     });
-    console.log(
-      '=============================================================='
-    );
-    console.log(data.access_token); // { access_token, token_type, expires_in }
+
     return data.access_token;
   }
 
@@ -195,18 +192,13 @@ export const facebookSignIn: RequestHandler = async (req, res, next) => {
         fields: 'email',
       },
     });
-    console.log(
-      '=============================================================='
-    );
-    console.log(data.email); // { access_token, token_type, expires_in }
+
     return data.email;
   }
 
   try {
     const accessToken = await getAccessTokenFromCode(code);
-    console.log(accessToken);
     const email = await getEmailFromAccessToken(accessToken);
-    console.log(email);
     res.locals.email = email;
     res.locals.authMethod = AuthMethod.FACEBOOK;
     return next();

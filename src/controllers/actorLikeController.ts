@@ -29,7 +29,6 @@ export const likeActor: RequestHandler = async (req, res) => {
       actor.likeCount++;
       await getRepository(Actor).save(actor);
 
-      console.log('you liked this actor');
       return res.status(200).redirect(req.body.requestAddress);
     } else {
       return res
@@ -68,8 +67,6 @@ export const unlikeActor: RequestHandler = async (req, res) => {
     actor.likeCount--;
     await getRepository(Actor).save(actor);
 
-    console.log('you unliked this actor');
-    console.log(req.body.requestAddress);
     return res.status(200).redirect(req.body.requestAddress);
   } catch (error) {
     return res.status(400).json({

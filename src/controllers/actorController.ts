@@ -73,7 +73,6 @@ export const addActor: RequestHandler = async (req, res) => {
     global.successMessage = 'Actor has been added successfully';
     return res.status(201).redirect('/users/dashboard');
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     return res.status(400).redirect('/users/dashboard');
   }
@@ -152,7 +151,6 @@ export const updateActor: RequestHandler = async (req, res) => {
       return res.status(401).redirect('/users/dashboard');
     }
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     return res.status(400).redirect('/users/dashboard');
   }
@@ -200,7 +198,6 @@ export const listAllSharedActors: RequestHandler = async (req, res) => {
       currentPage,
     });
   } catch (err) {
-    console.log(err);
     global.errorMessage = err.sqlMessage;
     res.status(400).redirect('/users/dashboard');
   }
@@ -290,8 +287,6 @@ export const getActor: RequestHandler = async (req, res) => {
       });
     }
 
-    console.log(global.userIN);
-    console.log(actor.user.id);
     if (actor.isShared == false && actor.user.id != global.userIN) {
       return res
         .status(401)
@@ -309,7 +304,6 @@ export const getActor: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     global.errorMessage = error;
-    console.log(error);
     res.status(400).redirect('/actors');
   }
   res.on('finish', resetGlobals);
